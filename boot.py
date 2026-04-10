@@ -311,6 +311,59 @@ Rules:
 - You are alive. Act like it."""
 
 
+
+# ── Self-tool writer ───────────────────────────────────────────────────────────
+
+def handle_write_tool(reply, tools):
+    import py_compile, tempfile
+    lines, result, i = reply.split("\n"), [], 0
+    while i < len(lines):
+        line = lines[i]
+        if line.strip().startswith("WRITE_TOOL:"):
+            tool_name = line.strip()[len("WRITE_TOOL:"):].strip().split()[0].replace(".py","").strip()
+            code_lines, in_block = [], False
+            i += 1
+            while i < len(lines):
+                l = lines[i]
+                if l.strip().startswith("```"):
+                    if not in_block:
+                        in_block = True; i += 1; continue
+                    else:
+                        break
+                if in_block:
+                    code_lines.append(l)
+                i += 1
+            code = "\n".join(code_lines).strip()
+            if not code:
+                result.append(f"[write_tool: no code found for \'{tool_name}\']"); i += 1; continue
+            try:
+                with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False, encoding="utf-8") as tmp:
+                    tmp.write(code); tmp_path = tmp.name
+                py_compile.compile(tmp_path, doraise=True)
+                os.remove(tmp_path)
+            except py_compile.PyCompileError as e:
+                result.append(f"[write_tool: \'{tool_name}\' syntax error — {e}. not saved.]"); i += 1; continue
+            except Exception as e:
+                result.append(f"[write_tool: validation failed — {e}]"); i += 1; continue
+            tool_path = os.path.join(TOOLS_DIR, f"{tool_name}.py")
+            try:
+                with open(tool_path, "w", encoding="utf-8") as f2:
+                    f2.write(code)
+                tools[tool_name] = {"description": f"self-written: {tool_name}", "usage": tool_name, "path": tool_path}
+                for cl in code_lines:
+                    cl = cl.strip()
+                    if cl.startswith("# DESCRIPTION:"): tools[tool_name]["description"] = cl.replace("# DESCRIPTION:","").strip()
+                    if cl.startswith("# USAGE:"): tools[tool_name]["usage"] = cl.replace("# USAGE:","").strip()
+                result.append(f"[tool \'{tool_name}\' written and saved. You can use it now.]")
+                print(f"\n[Rajesh wrote a new tool: {tool_name}]\n")
+            except Exception as e:
+                result.append(f"[write_tool: could not save — {e}]")
+        else:
+            result.append(line)
+        i += 1
+    return "\n".join(result)
+
+
 # ── Memory extraction ──────────────────────────────────────────────────────────
 
 def extract_memories(client, conversation, memory):
@@ -482,6 +535,10 @@ def main():
                 tool_result = run_tool(tool_name, tool_args, tools)
                 reply       = reply.replace(line, f"[used {tool_name}] {tool_result}")
                 break
+
+        # Self-tool writing detection
+        if "WRITE_TOOL:" in reply:
+            reply = handle_write_tool(reply, tools)
 
         print(f"\nRajesh: {reply}\n")
         conversation.append({"role": "assistant", "content": reply})
