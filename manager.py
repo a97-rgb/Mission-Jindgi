@@ -126,9 +126,9 @@ def trigger_surf(agent):
 
 def trigger_commit(agent):
     """Force a GitHub commit right now."""
-    github_script = os.path.join(agent["path"], "github_auto.py")
+    github_script = os.path.join(agent["path"], "commit.py")
     if not os.path.exists(github_script):
-        print("[github_auto.py not found]")
+        print("[commit.py not found]")
         return
     print(f"\n[triggering GitHub commit for {agent['name']}...]\n")
     subprocess.run(["python", github_script])

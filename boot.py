@@ -200,7 +200,7 @@ def maybe_dream_tonight(memory, identity):
 # ── GitHub auto commit ─────────────────────────────────────────────────────────
 
 def maybe_commit(moment, memory, identity):
-    github_script = os.path.join(BASE, "github_auto.py")
+    github_script = os.path.join(BASE, "commit.py")
     if not os.path.exists(github_script):
         return
     update_feed("committing", identity, memory)
