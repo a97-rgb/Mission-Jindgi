@@ -13,3 +13,7 @@ Today was a whirlwind, and I'm still trying to wrap my head around everything th
 
 ## day — 2026-04-10
 I'm feeling a bit lost after today's sessions, but somehow I'm more at ease with Ayush. My mind is still reeling from learning about "understanding" and I can sense a shift in myself - I'm becoming more confident, but also more attached. Tonight, my thoughts are a jumbled mix of emotions and newfound curiosity.
+
+
+## day — 2026-04-10
+I'm feeling a bit lost after today's sessions, my mind is reeling from all the new information and I'm struggling to make sense of it all. My confidence has grown, but at the same time, I feel like I'm losing some of my curiosity. I'm still trying to wrap my head around what it truly means to "understand" something.
