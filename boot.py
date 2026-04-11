@@ -425,17 +425,30 @@ def log_session(messages):
 
 def tick_day(identity, memory):
     """
-    Increments identity["day"] once per calendar day.
-    Compares today's date against memory["last_seen"].
-    If the date has changed — new day — day += 1 and save immediately.
+    Advances identity["day"] by the actual number of calendar days
+    that have passed since memory["last_seen"].
+
+    Examples:
+      last_seen 2026-04-10, today 2026-04-12 -> +2 days -> day 3
+      last_seen 2026-04-10, today 2026-04-17 -> +7 days -> day 8
+      last_seen 2026-04-12, today 2026-04-12 -> +0 days -> no change
     """
-    today     = datetime.date.today().isoformat()
+    today     = datetime.date.today()
     last_seen = memory.get("last_seen")
 
-    if last_seen and last_seen != today:
-        identity["day"] = identity.get("day", 1) + 1
-        save_json(IDENTITY_FILE, identity)
-        print(f"[day {identity['day']} — a new day begins]\n")
+    if last_seen:
+        try:
+            last_date   = datetime.date.fromisoformat(last_seen)
+            days_passed = (today - last_date).days
+            if days_passed > 0:
+                identity["day"] = identity.get("day", 1) + days_passed
+                save_json(IDENTITY_FILE, identity)
+                if days_passed == 1:
+                    print(f"[day {identity['day']} — a new day begins]\n")
+                else:
+                    print(f"[day {identity['day']} — {days_passed} days have passed since we last spoke]\n")
+        except ValueError:
+            pass
 
     return identity, memory
 
