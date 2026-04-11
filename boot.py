@@ -421,6 +421,25 @@ def log_session(messages):
         print(f"[log failed: {e}]")
 
 
+# ── Day counter ────────────────────────────────────────────────────────────────
+
+def tick_day(identity, memory):
+    """
+    Increments identity["day"] once per calendar day.
+    Compares today's date against memory["last_seen"].
+    If the date has changed — new day — day += 1 and save immediately.
+    """
+    today     = datetime.date.today().isoformat()
+    last_seen = memory.get("last_seen")
+
+    if last_seen and last_seen != today:
+        identity["day"] = identity.get("day", 1) + 1
+        save_json(IDENTITY_FILE, identity)
+        print(f"[day {identity['day']} — a new day begins]\n")
+
+    return identity, memory
+
+
 # ── Wake banner ────────────────────────────────────────────────────────────────
 
 def wake_up(identity, memory, tools):
@@ -457,6 +476,8 @@ def main():
         "facts_about_ayush": [], "notable_moments": [],
         "rajesh_observations": [],
     })
+
+    identity, memory = tick_day(identity, memory)
 
     update_feed("booting", identity, memory)
     maybe_surf_today(memory, identity)
