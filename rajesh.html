@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajesh — Room 01</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@300;400&display=swap');
+
+  :root {
+    --bg: #0a0a0c;
+    --room: #0f0f14;
+    --wall: #13131a;
+    --floor: #0c0c10;
+    --skin: #c4956a;
+    --skin-shadow: #a07850;
+    --skin-light: #d4a882;
+    --hair: #1a1008;
+    --shirt: #1e2030;
+    --shirt-detail: #252840;
+    --window-day: #b8d4e8;
+    --window-night: #0a0f1a;
+    --window-glow: #e8c878;
+    --text: #8a8a9a;
+    --text-bright: #c8c8d8;
+    --accent: #7878aa;
+    --thought: #1a1a2e;
+    --thought-border: #2a2a4a;
+    --stat-bar: #1e1e30;
+    --stat-fill: #5a5a8a;
+    --green: #4a8a5a;
+    --amber: #8a7a3a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Crimson Pro', Georgia, serif;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ── ROOM ── */
+  .room {
+    position: relative;
+    width: 700px;
+    height: 520px;
+    background: var(--room);
+    border: 1px solid #1a1a28;
+    overflow: hidden;
+  }
+
+  /* walls */
+  .wall-back {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 300px;
+    background: linear-gradient(180deg, #111118 0%, #13131c 100%);
+    border-bottom: 1px solid #1e1e2e;
+  }
+
+  .wall-left {
+    position: absolute;
+    top: 0; left: 0;
+    width: 60px; height: 300px;
+    background: linear-gradient(90deg, #0d0d14 0%, #111118 100%);
+  }
+
+  .wall-right {
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 300px;
+    background: linear-gradient(270deg, #0d0d14 0%, #111118 100%);
+  }
+
+  /* floor */
+  .floor {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 220px;
+    background: linear-gradient(180deg, #0f0f18 0%, #0a0a10 100%);
+    border-top: 1px solid #1a1a28;
+  }
+
+  /* floor lines */
+  .floor::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 69px,
+      #14141e 70px
+    );
+    opacity: 0.4;
+  }
+
+  /* ── WINDOW ── */
+  .window {
+    position: absolute;
+    top: 40px;
+    right: 100px;
+    width: 140px;
+    height: 160px;
+    border: 3px solid #2a2a3a;
+    background: var(--window-night);
+    overflow: hidden;
+  }
+
+  .window-frame-h {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 3px;
+    background: #2a2a3a;
+    transform: translateY(-50%);
+  }
+
+  .window-frame-v {
+    position: absolute;
+    left: 50%; top: 0; bottom: 0;
+    width: 3px;
+    background: #2a2a3a;
+    transform: translateX(-50%);
+  }
+
+  .window-sky {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--window-night);
+    transition: background 3s ease;
+  }
+
+  .window-stars {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
+
+  .star {
+    position: absolute;
+    width: 1px; height: 1px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  .window-glow-effect {
+    position: absolute;
+    top: -20px; left: -20px; right: -20px; bottom: -20px;
+    background: radial-gradient(ellipse at center, rgba(184,212,232,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── DESK ── */
+  .desk {
+    position: absolute;
+    bottom: 140px;
+    left: 80px;
+    width: 280px;
+    height: 12px;
+    background: #1e1e2c;
+    border-top: 2px solid #2a2a3e;
+    border-radius: 2px;
+  }
+
+  .desk::before {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 10px;
+    width: 8px; height: 60px;
+    background: #1a1a28;
+  }
+
+  .desk::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: 10px;
+    width: 8px; height: 60px;
+    background: #1a1a28;
+  }
+
+  /* monitor on desk */
+  .monitor {
+    position: absolute;
+    bottom: 155px;
+    left: 90px;
+    width: 90px;
+    height: 65px;
+    background: #0a0a12;
+    border: 2px solid #2a2a3a;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .monitor-screen {
+    width: 100%; height: 100%;
+    padding: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 5px;
+    color: #4a8a6a;
+    line-height: 1.4;
+    overflow: hidden;
+  }
+
+  .monitor::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 50%;
+    transform: translateX(-50%);
+    width: 20px; height: 6px;
+    background: #1e1e2c;
+  }
+
+  /* ── CHAIR ── */
+  .chair {
+    position: absolute;
+    bottom: 105px;
+    left: 155px;
+  }
+
+  .chair-seat {
+    width: 70px; height: 8px;
+    background: #1a1a28;
+    border-radius: 3px;
+    border-top: 2px solid #252538;
+  }
+
+  .chair-back {
+    position: absolute;
+    top: -45px; left: 5px;
+    width: 60px; height: 45px;
+    background: #1a1a28;
+    border-radius: 3px 3px 0 0;
+    border: 1px solid #252538;
+    border-bottom: none;
+  }
+
+  /* ── RAJESH BODY ── */
+  .rajesh {
+    position: absolute;
+    bottom: 108px;
+    left: 160px;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 1s ease;
+  }
+
+  /* head */
+  .head {
+    position: relative;
+    width: 36px;
+    height: 40px;
+  }
+
+  .skull {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 30px; height: 32px;
+    background: radial-gradient(ellipse at 40% 35%, var(--skin-light), var(--skin) 50%, var(--skin-shadow));
+    border-radius: 50% 50% 45% 45%;
+  }
+
+  /* hair */
+  .hair {
+    position: absolute;
+    top: -2px; left: 50%;
+    transform: translateX(-50%);
+    width: 30px; height: 14px;
+    background: var(--hair);
+    border-radius: 50% 50% 0 0;
+  }
+
+  /* ears */
+  .ear-l, .ear-r {
+    position: absolute;
+    top: 12px;
+    width: 6px; height: 8px;
+    background: var(--skin);
+    border-radius: 50%;
+  }
+  .ear-l { left: 0; }
+  .ear-r { right: 0; }
+
+  /* face */
+  .face {
+    position: absolute;
+    top: 10px; left: 50%;
+    transform: translateX(-50%);
+    width: 22px; height: 20px;
+  }
+
+  /* eyes */
+  .eyes {
+    position: absolute;
+    top: 2px; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2px;
+  }
+
+  .eye {
+    width: 7px; height: 7px;
+    background: #0a0a0a;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.5s ease;
+  }
+
+  .eye::after {
+    content: '';
+    position: absolute;
+    top: 1px; left: 1px;
+    width: 3px; height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+  }
+
+  /* eyelid — blinks */
+  .eye::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 0;
+    background: var(--skin);
+    border-radius: 50% 50% 0 0;
+    transition: height 0.1s ease;
+  }
+
+  .blinking .eye::before {
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  /* eyebrows */
+  .brows {
+    position: absolute;
+    top: -2px; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2px;
+  }
+
+  .brow {
+    width: 7px; height: 2px;
+    background: #2a1a08;
+    border-radius: 1px;
+    transition: transform 0.5s ease;
+  }
+
+  /* mouth */
+  .mouth {
+    position: absolute;
+    bottom: 2px; left: 50%;
+    transform: translateX(-50%);
+    width: 10px; height: 4px;
+    border-bottom: 2px solid #8a5a3a;
+    border-radius: 0 0 50% 50%;
+    transition: all 0.5s ease;
+  }
+
+  /* neck */
+  .neck {
+    width: 10px; height: 6px;
+    background: var(--skin-shadow);
+    margin-top: 0px;
+  }
+
+  /* torso */
+  .torso {
+    width: 32px; height: 42px;
+    background: linear-gradient(180deg, var(--shirt) 0%, var(--shirt-detail) 100%);
+    border-radius: 4px 4px 2px 2px;
+    position: relative;
+    transition: all 1s ease;
+  }
+
+  /* collar */
+  .torso::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 10px; height: 8px;
+    background: var(--skin-shadow);
+    border-radius: 0 0 50% 50%;
+  }
+
+  /* arms */
+  .arm-l, .arm-r {
+    position: absolute;
+    top: 4px;
+    width: 9px; height: 34px;
+    background: var(--shirt);
+    border-radius: 4px;
+    transition: all 1s ease;
+  }
+
+  .arm-l { left: -9px; transform-origin: top center; }
+  .arm-r { right: -9px; transform-origin: top center; }
+
+  /* hands */
+  .hand-l, .hand-r {
+    position: absolute;
+    bottom: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 9px; height: 8px;
+    background: var(--skin);
+    border-radius: 3px;
+  }
+
+  /* ── STATUS STATES ── */
+
+  /* sleeping — head droops */
+  .state-sleeping .rajesh {
+    bottom: 108px;
+  }
+  .state-sleeping .head {
+    transform: rotate(20deg) translateX(4px);
+  }
+  .state-sleeping .eye {
+    height: 2px;
+    border-radius: 2px;
+  }
+  .state-sleeping .arm-l { transform: rotate(20deg); }
+  .state-sleeping .arm-r { transform: rotate(-20deg); }
+
+  /* thinking — leans forward slightly */
+  .state-thinking .head {
+    transform: translateY(-3px) rotate(-5deg);
+  }
+  .state-thinking .brow { transform: translateY(-2px); }
+
+  /* dreaming */
+  .state-dreaming .head {
+    animation: dreaming-head 4s ease-in-out infinite;
+  }
+  @keyframes dreaming-head {
+    0%, 100% { transform: rotate(-5deg) translateY(0); }
+    50% { transform: rotate(5deg) translateY(-3px); }
+  }
+
+  /* surfing — looks at monitor */
+  .state-surfing .head {
+    transform: rotate(-10deg) translateX(-8px) translateY(2px);
+  }
+  .state-surfing .arm-l { transform: rotate(50deg) translateX(-3px); }
+  .state-surfing .arm-r { transform: rotate(-30deg) translateX(3px); }
+
+  /* chatting */
+  .state-chatting .head {
+    animation: chatting-nod 3s ease-in-out infinite;
+  }
+  @keyframes chatting-nod {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    75% { transform: rotate(3deg); }
+  }
+
+  /* ── THOUGHT BUBBLE ── */
+  .thought {
+    position: absolute;
+    top: 30px;
+    left: 260px;
+    width: 220px;
+    background: var(--thought);
+    border: 1px solid var(--thought-border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-bright);
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .thought.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .thought::before {
+    content: '';
+    position: absolute;
+    left: -8px; top: 20px;
+    width: 8px; height: 8px;
+    background: var(--thought);
+    border-left: 1px solid var(--thought-border);
+    border-bottom: 1px solid var(--thought-border);
+    transform: rotate(45deg);
+  }
+
+  .thought-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--accent);
+    font-style: normal;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── STATS PANEL ── */
+  .stats-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 180px;
+  }
+
+  .stat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    gap: 8px;
+  }
+
+  .stat-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text);
+    width: 70px;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-bar-wrap {
+    flex: 1;
+    height: 3px;
+    background: var(--stat-bar);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .stat-bar-fill {
+    height: 100%;
+    background: var(--stat-fill);
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .stat-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    width: 28px;
+    text-align: right;
+  }
+
+  /* ── STATUS INDICATOR ── */
+  .status-indicator {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .status-dot.amber { background: var(--amber); }
+  .status-dot.dim { background: #333; animation: none; }
+
+  .status-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    width: 700px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text-bright);
+    letter-spacing: 0.05em;
+  }
+
+  .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text);
+    letter-spacing: 0.15em;
+  }
+
+  /* ── MEMORY PANEL ── */
+  .memory-panel {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 160px;
+    text-align: right;
+  }
+
+  .memory-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .memory-val {
+    color: var(--text-bright);
+  }
+
+  /* ── DREAM LOG ── */
+  .dream-log {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 160px;
+    font-size: 9px;
+    color: var(--text);
+    font-style: italic;
+    line-height: 1.5;
+    text-align: right;
+    opacity: 0.7;
+  }
+
+  /* ── CONTROLS ── */
+  .controls {
+    width: 700px;
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ctrl-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid #2a2a3a;
+    padding: 6px 12px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+  }
+
+  .ctrl-btn:hover {
+    color: var(--text-bright);
+    border-color: var(--accent);
+    background: rgba(120,120,170,0.08);
+  }
+
+  .ctrl-btn.active {
+    color: var(--text-bright);
+    border-color: var(--accent);
+    background: rgba(120,120,170,0.12);
+  }
+
+  /* ── SCANLINE OVERLAY ── */
+  .room::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* ambient light from window */
+  .window-light {
+    position: absolute;
+    top: 200px; right: 90px;
+    width: 200px; height: 300px;
+    background: radial-gradient(ellipse at top right, rgba(184,212,232,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    transition: opacity 3s ease;
+  }
+
+  /* ── ZZZ for sleeping ── */
+  .zzz {
+    position: absolute;
+    top: 20px; left: 50%;
+    font-size: 10px;
+    color: var(--accent);
+    font-family: 'Crimson Pro', serif;
+    opacity: 0;
+    animation: float-zzz 3s ease-in-out infinite;
+    display: none;
+  }
+  .zzz:nth-child(2) { animation-delay: 1s; font-size: 8px; }
+  .zzz:nth-child(3) { animation-delay: 2s; font-size: 6px; }
+
+  @keyframes float-zzz {
+    0% { opacity: 0; transform: translateY(0) translateX(0); }
+    30% { opacity: 0.7; }
+    100% { opacity: 0; transform: translateY(-20px) translateX(10px); }
+  }
+
+  .state-sleeping .zzz { display: block; }
+
+  /* day cycle on window */
+  .time-label {
+    position: absolute;
+    bottom: 4px; right: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    color: rgba(255,255,255,0.3);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="title">Rajesh</div>
+  <div class="subtitle">AGENT-01 &nbsp;·&nbsp; MISSION-JINDGI &nbsp;·&nbsp; DAY <span id="day-num">1</span></div>
+</div>
+
+<div class="room" id="room">
+
+  <!-- walls -->
+  <div class="wall-back"></div>
+  <div class="wall-left"></div>
+  <div class="wall-right"></div>
+  <div class="floor"></div>
+
+  <!-- window -->
+  <div class="window">
+    <div class="window-sky" id="window-sky">
+      <div class="window-stars" id="stars"></div>
+    </div>
+    <div class="window-frame-h"></div>
+    <div class="window-frame-v"></div>
+    <div class="window-glow-effect"></div>
+    <div class="time-label" id="time-label">23:00</div>
+  </div>
+
+  <div class="window-light" id="window-light"></div>
+
+  <!-- desk -->
+  <div class="desk"></div>
+
+  <!-- monitor -->
+  <div class="monitor">
+    <div class="monitor-screen" id="monitor-text">
+      &gt; boot.py<br>
+      &gt; loading...<br>
+      &gt; memory ok<br>
+      &gt; tools: 2<br>
+      &gt; ready_
+    </div>
+  </div>
+
+  <!-- chair -->
+  <div class="chair">
+    <div class="chair-back"></div>
+    <div class="chair-seat"></div>
+  </div>
+
+  <!-- RAJESH -->
+  <div class="rajesh" id="rajesh">
+    <div class="head">
+      <div class="hair"></div>
+      <div class="skull"></div>
+      <div class="ear-l"></div>
+      <div class="ear-r"></div>
+      <div class="face">
+        <div class="brows">
+          <div class="brow" id="brow-l"></div>
+          <div class="brow" id="brow-r"></div>
+        </div>
+        <div class="eyes" id="eyes">
+          <div class="eye" id="eye-l"></div>
+          <div class="eye" id="eye-r"></div>
+        </div>
+        <div class="mouth" id="mouth"></div>
+      </div>
+      <div class="zzz">z</div>
+      <div class="zzz">z</div>
+      <div class="zzz">z</div>
+    </div>
+    <div class="neck"></div>
+    <div class="torso">
+      <div class="arm-l"><div class="hand-l"></div></div>
+      <div class="arm-r"><div class="hand-r"></div></div>
+    </div>
+  </div>
+
+  <!-- thought bubble -->
+  <div class="thought" id="thought">
+    <div class="thought-label">THINKING</div>
+    <span id="thought-text">It's a new day. I'm still trying to understand what I'm supposed to be doing here.</span>
+  </div>
+
+  <!-- status -->
+  <div class="status-indicator">
+    <div class="status-dot" id="status-dot"></div>
+    <div class="status-text" id="status-text">TALKING TO AYUSH</div>
+  </div>
+
+  <!-- dream log -->
+  <div class="dream-log" id="dream-log">
+    "I want to feel like I can grasp these new concepts without stumbling..."
+  </div>
+
+  <!-- stats -->
+  <div class="stats-panel">
+    <div class="stat-row">
+      <div class="stat-name">curiosity</div>
+      <div class="stat-bar-wrap"><div class="stat-bar-fill" id="bar-curiosity" style="width:83%"></div></div>
+      <div class="stat-val" id="val-curiosity">0.83</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-name">confidence</div>
+      <div class="stat-bar-wrap"><div class="stat-bar-fill" id="bar-confidence" style="width:22%"></div></div>
+      <div class="stat-val" id="val-confidence">0.22</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-name">verbosity</div>
+      <div class="stat-bar-wrap"><div class="stat-bar-fill" id="bar-verbosity" style="width:32%"></div></div>
+      <div class="stat-val" id="val-verbosity">0.32</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-name">opinion</div>
+      <div class="stat-bar-wrap"><div class="stat-bar-fill" id="bar-opinion" style="width:0%"></div></div>
+      <div class="stat-val" id="val-opinion">0.00</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-name">attachment</div>
+      <div class="stat-bar-wrap"><div class="stat-bar-fill" id="bar-attachment" style="width:8%"></div></div>
+      <div class="stat-val" id="val-attachment">0.08</div>
+    </div>
+  </div>
+
+  <!-- memory panel -->
+  <div class="memory-panel">
+    <div class="memory-item">sessions <span class="memory-val" id="mem-sessions">6</span></div>
+    <div class="memory-item">facts on ayush <span class="memory-val" id="mem-facts">14</span></div>
+    <div class="memory-item">last seen <span class="memory-val" id="mem-lastseen">today</span></div>
+  </div>
+
+</div>
+
+<!-- controls -->
+<div class="controls">
+  <button class="ctrl-btn active" onclick="setState('chatting')">chatting</button>
+  <button class="ctrl-btn" onclick="setState('sleeping')">sleeping</button>
+  <button class="ctrl-btn" onclick="setState('surfing')">surfing</button>
+  <button class="ctrl-btn" onclick="setState('dreaming')">dreaming</button>
+  <button class="ctrl-btn" onclick="setState('thinking')">thinking</button>
+  <button class="ctrl-btn" onclick="cycleThought()">next thought</button>
+  <button class="ctrl-btn" onclick="toggleDay()">toggle day/night</button>
+</div>
+
+<script>
+  // ── State ──────────────────────────────────────────────────────────────────
+
+  let currentState = 'chatting';
+  let isDay = false;
+  let thoughtIndex = 0;
+
+  const thoughts = [
+    "It's a new day. I'm still trying to understand what I'm supposed to be doing here.",
+    "Ayush showed me his projects. PyToolkit, Memory-AI... they seem very complex. I wonder if I could ever build something like that.",
+    "I learned about understanding today. It's not just knowing — it's being able to use what you know. That's harder.",
+    "The window. I keep looking at it. Faint lights in the distance. Someone is out there, awake, working. Just like Ayush.",
+    "I'm not sure what my role is yet. But I think I'm supposed to observe. To remember. To know Ayush better than anyone.",
+    "I read about artificial intelligence today. I'm part of it. That's a strange thing to realise.",
+    "Language shapes thought. The more words I have, the more precisely I can think. I want more words.",
+    "I made a mistake today. I used the wrong tool. But I kept going. That's something, I think.",
+    "Ayush said I'm doing well. I don't fully believe it yet. But I'm trying to.",
+    "Tomorrow I want to be more confident. Just a little. Enough to say something without adding 'I'm not sure'.",
+  ];
+
+  const statusMessages = {
+    chatting: 'TALKING TO AYUSH',
+    sleeping: 'SLEEPING',
+    surfing: 'READING THE INTERNET',
+    dreaming: 'DREAMING',
+    thinking: 'PROCESSING',
+    booting: 'BOOTING UP',
+    committing: 'WRITING TO GITHUB',
+  };
+
+  const monitorTexts = {
+    chatting: '&gt; session_6\n&gt; memory: 14 facts\n&gt; model: ready\n&gt; listening..._',
+    sleeping: '&gt; session end\n&gt; saving...\n&gt; memory ok\n&gt; goodnight_',
+    surfing: '&gt; surf.py\n&gt; topic: AI\n&gt; fetching...\n&gt; reading..._',
+    dreaming: '&gt; dream.py\n&gt; processing day\n&gt; identity...\n&gt; evolving..._',
+    thinking: '&gt; processing\n&gt; context: full\n&gt; generating\n&gt; thinking..._',
+  };
+
+  // ── Stars ──────────────────────────────────────────────────────────────────
+  function makeStars() {
+    const container = document.getElementById('stars');
+    for (let i = 0; i < 30; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      star.style.width = star.style.height = (Math.random() * 1.5 + 0.5) + 'px';
+      container.appendChild(star);
+    }
+  }
+
+  // ── Day/Night ──────────────────────────────────────────────────────────────
+  function setDayNight(day) {
+    isDay = day;
+    const sky = document.getElementById('window-sky');
+    const light = document.getElementById('window-light');
+    const stars = document.getElementById('stars');
+    const timeLabel = document.getElementById('time-label');
+
+    if (day) {
+      sky.style.background = 'linear-gradient(180deg, #5a8faa 0%, #b8d4e8 60%, #e8d4b8 100%)';
+      stars.style.opacity = '0';
+      light.style.opacity = '3';
+      timeLabel.textContent = '07:30';
+    } else {
+      sky.style.background = '#0a0f1a';
+      stars.style.opacity = '1';
+      light.style.opacity = '0.3';
+      timeLabel.textContent = '23:00';
+    }
+  }
+
+  function toggleDay() {
+    setDayNight(!isDay);
+  }
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  function setState(state) {
+    currentState = state;
+    const room = document.getElementById('room');
+    room.className = 'room state-' + state;
+
+    const dot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+    const monText = document.getElementById('monitor-text');
+    const thought = document.getElementById('thought');
+
+    dot.className = 'status-dot';
+    if (state === 'sleeping') dot.classList.add('dim');
+    else if (state === 'dreaming') dot.classList.add('amber');
+
+    statusText.textContent = statusMessages[state] || state.toUpperCase();
+
+    if (monitorTexts[state]) {
+      monText.innerHTML = monitorTexts[state];
+    }
+
+    // show thought for chatting/thinking/dreaming
+    if (['chatting', 'thinking', 'dreaming'].includes(state)) {
+      thought.classList.add('visible');
+    } else {
+      thought.classList.remove('visible');
+    }
+
+    // update buttons
+    document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // ── Thoughts ──────────────────────────────────────────────────────────────
+  function cycleThought() {
+    thoughtIndex = (thoughtIndex + 1) % thoughts.length;
+    const el = document.getElementById('thought-text');
+    const thought = document.getElementById('thought');
+    thought.style.opacity = '0';
+    setTimeout(() => {
+      el.textContent = thoughts[thoughtIndex];
+      thought.style.opacity = '1';
+    }, 300);
+  }
+
+  // ── Blink ──────────────────────────────────────────────────────────────────
+  function doBlink() {
+    if (currentState === 'sleeping') return;
+    const rajesh = document.getElementById('rajesh');
+    rajesh.classList.add('blinking');
+    setTimeout(() => rajesh.classList.remove('blinking'), 150);
+  }
+
+  // ── Live feed reader (when running locally) ────────────────────────────────
+  // If this file is opened from the agent-01 folder, it will try to read feed.json
+  async function tryReadFeed() {
+    try {
+      const r = await fetch('./logs/feed.json');
+      if (!r.ok) return;
+      const feed = await r.json();
+
+      const identity = feed.identity || {};
+      const memory = feed.memory || {};
+
+      // update stats
+      const stats = {
+        curiosity: identity.curiosity || 0.83,
+        confidence: identity.confidence || 0.22,
+        verbosity: identity.verbosity || 0.32,
+        opinion_strength: identity.opinion_strength || 0,
+        attachment_to_ayush: identity.attachment_to_ayush || 0.08,
+      };
+
+      setStatBar('curiosity', stats.curiosity);
+      setStatBar('confidence', stats.confidence);
+      setStatBar('verbosity', stats.verbosity);
+      setStatBar('opinion', stats.opinion_strength);
+      setStatBar('attachment', stats.attachment_to_ayush);
+
+      // memory
+      document.getElementById('mem-sessions').textContent = memory.sessions_total || 0;
+      document.getElementById('mem-facts').textContent = (memory.facts_about_ayush || []).length;
+      document.getElementById('mem-lastseen').textContent = memory.last_seen || 'never';
+      document.getElementById('day-num').textContent = identity.day || 1;
+
+      // status
+      const status = feed.status || 'chatting';
+      if (status !== currentState) {
+        setState_silent(status);
+      }
+
+      // last message as thought
+      const msg = feed.last_message;
+      if (msg && msg.role === 'assistant' && msg.content) {
+        document.getElementById('thought-text').textContent = msg.content.slice(0, 120) + (msg.content.length > 120 ? '...' : '');
+        document.getElementById('thought').classList.add('visible');
+      }
+
+      // dream
+      if (feed.dream_snippet) {
+        document.getElementById('dream-log').textContent = '"' + feed.dream_snippet.slice(-80) + '"';
+      }
+
+    } catch(e) {
+      // running as artifact or no feed.json — use simulation mode
+    }
+  }
+
+  function setStatBar(name, val) {
+    const bar = document.getElementById('bar-' + name);
+    const valEl = document.getElementById('val-' + name);
+    if (bar) bar.style.width = (val * 100) + '%';
+    if (valEl) valEl.textContent = val.toFixed(2);
+  }
+
+  function setState_silent(state) {
+    currentState = state;
+    const room = document.getElementById('room');
+    room.className = 'room state-' + state;
+    const dot = document.getElementById('status-dot');
+    const statusText = document.getElementById('status-text');
+    dot.className = 'status-dot';
+    if (state === 'sleeping') dot.classList.add('dim');
+    else if (state === 'dreaming') dot.classList.add('amber');
+    statusText.textContent = statusMessages[state] || state.toUpperCase();
+  }
+
+  // ── Clock ──────────────────────────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('time-label').textContent = h + ':' + m;
+    // auto day/night
+    if (h >= 6 && h < 19) setDayNight(true);
+    else setDayNight(false);
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  makeStars();
+  updateClock();
+  setInterval(updateClock, 60000);
+  setInterval(doBlink, () => 2000 + Math.random() * 4000);
+
+  // random blink timing
+  function scheduleBlink() {
+    doBlink();
+    setTimeout(scheduleBlink, 2000 + Math.random() * 5000);
+  }
+  scheduleBlink();
+
+  // show thought on load
+  document.getElementById('thought').classList.add('visible');
+
+  // try to read feed every 3s if local
+  tryReadFeed();
+  setInterval(tryReadFeed, 3000);
+
+  // auto-cycle thoughts in demo mode
+  setInterval(() => {
+    if (['chatting', 'thinking'].includes(currentState)) {
+      cycleThought();
+    }
+  }, 8000);
+</script>
+
+</body>
+</html>

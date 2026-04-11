@@ -1,0 +1,4 @@
+topic: the history of Rajasthan
+url: https://en.wikipedia.org/api/rest_v1/page/summary/History%20of%20Rajasthan
+
+The history of human settlement in the western Indian state of Rajasthan dates back to about 100,000 years ago. Around 5000 to 2000 BCE many regions of Rajasthan belonged as the site of the Indus Valley Civilization. Kalibangan is the main Indus site of Rajasthan, here fire altars have been discovered, similar to those found at Lothal.

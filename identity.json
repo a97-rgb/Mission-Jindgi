@@ -1,9 +1,9 @@
 {
-  "curiosity": 0.83,
-  "confidence": 0.22,
-  "verbosity": 0.32,
-  "opinion_strength": 0.0,
-  "attachment_to_ayush": 0.08,
+  "curiosity": 0.8,
+  "confidence": 0.25,
+  "verbosity": 0.35,
+  "opinion_strength": 0.01,
+  "attachment_to_ayush": 0.11,
   "name": "Rajesh",
   "day": 1,
   "session_count": 6

@@ -12,7 +12,10 @@ IDENTITY_FILE = os.path.join(BASE, "identity.json")
 MEMORY_FILE   = os.path.join(BASE, "memory.json")
 LEARNED_FILE  = os.path.join(BASE, "learned_today.md")
 DOWNLOADS_DIR = os.path.join(BASE, "downloads")
+LOG_DIR       = os.path.join(BASE, "logs")
+FEED_FILE     = os.path.join(LOG_DIR, "feed.json")
 os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+os.makedirs(LOG_DIR, exist_ok=True)
 
 TOPIC_POOL = [
     "artificial intelligence",
@@ -44,12 +47,46 @@ HEADERS = {
 }
 
 
+# ── Helpers ────────────────────────────────────────────────────────────────────
+
 def load_json(path, default):
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
     return default
 
+
+def update_feed(status, identity, memory, extra=None):
+    """Write current state to feed.json so rajesh.html updates live."""
+    feed = {
+        "status": status,
+        "identity": identity,
+        "memory": {
+            "sessions_total":    memory.get("sessions_total", 0),
+            "facts_about_ayush": memory.get("facts_about_ayush", []),
+            "last_seen":         memory.get("last_seen"),
+        },
+        "dream_snippet": "",
+        "last_message":  None,
+        "topic":         None,
+    }
+    if extra:
+        feed.update(extra)
+    try:
+        with open(FEED_FILE, "w", encoding="utf-8") as f:
+            json.dump(feed, f, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
+
+STOPWORDS = {
+    "about", "ayush", "often", "likes", "really", "wants", "still",
+    "always", "never", "their", "there", "these", "those", "which",
+    "mostly", "little", "every", "other", "after", "before", "because",
+    "something", "nothing", "anything", "everything", "himself", "herself",
+    "itself", "myself", "yourself", "though", "through", "should", "would",
+    "could", "might", "think", "knows", "seems", "rajesh", "future",
+}
 
 def pick_topic(memory):
     facts    = memory.get("facts_about_ayush", [])
@@ -58,7 +95,7 @@ def pick_topic(memory):
         words = fact.lower().split()
         for w in words:
             w = re.sub(r'[^\w]', '', w)
-            if len(w) > 5:
+            if len(w) > 6 and w not in STOPWORDS:
                 keywords.append(w)
     if keywords and random.random() < 0.4:
         return random.choice(keywords)
@@ -72,7 +109,29 @@ def extract_text_from_html(html):
     return text
 
 
+# ── Fetchers ───────────────────────────────────────────────────────────────────
+
+def fetch_via_duckduckgo(topic):
+    """DuckDuckGo instant answer — no API key, works well in India."""
+    try:
+        url = f"https://api.duckduckgo.com/?q={quote(topic)}&format=json&no_html=1&skip_disambig=1"
+        r = requests.get(url, headers=HEADERS, timeout=10)
+        if r.status_code == 200:
+            data = r.json()
+            abstract = data.get("AbstractText", "")
+            if len(abstract) > 200:
+                source = data.get("AbstractURL", url)
+                related = data.get("RelatedTopics", [])
+                extra = [item["Text"] for item in related[:5] if isinstance(item, dict) and item.get("Text")]
+                full_text = abstract + "\n\n" + "\n".join(extra)
+                return source, full_text
+    except Exception as e:
+        print(f"[duckduckgo failed: {e}]")
+    return None, None
+
+
 def fetch_via_wikipedia(topic):
+    # Try REST summary API
     try:
         search_term = topic.replace(' ', '_')
         url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(search_term)}"
@@ -84,7 +143,25 @@ def fetch_via_wikipedia(topic):
                 page_url = data.get("content_urls", {}).get("desktop", {}).get("page", url)
                 return page_url, extract
     except Exception as e:
-        print(f"[wikipedia fetch failed: {e}]")
+        print(f"[wikipedia REST failed: {e}]")
+
+    # Try Wikipedia search API as fallback
+    try:
+        search_url = f"https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={quote(topic)}&format=json&utf8=1"
+        r = requests.get(search_url, headers=HEADERS, timeout=10)
+        if r.status_code == 200:
+            results = r.json().get("query", {}).get("search", [])
+            if results:
+                page_title = results[0]["title"]
+                summary_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(page_title)}"
+                r2 = requests.get(summary_url, headers=HEADERS, timeout=10)
+                if r2.status_code == 200:
+                    data = r2.json()
+                    extract = data.get("extract", "")
+                    if len(extract) > 200:
+                        return summary_url, extract
+    except Exception as e:
+        print(f"[wikipedia search failed: {e}]")
     return None, None
 
 
@@ -113,36 +190,39 @@ def fetch_via_news(topic):
 
 
 def fetch_via_groq(client, topic):
-    """Last resort — ask Groq to write a factual summary about the topic."""
     try:
         prompt = f"""Write a factual, informative 300-word summary about: "{topic}"
-
-Write it like a short encyclopedia article. Be accurate. No opinions. Just facts.
-"""
+Write it like a short encyclopedia article. Be accurate. No opinions. Just facts."""
         r = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=500,
-            temperature=0.3,
+            max_tokens=500, temperature=0.3,
         )
         text = r.choices[0].message.content.strip()
-        url  = f"[internal knowledge — {topic}]"
-        return url, text
+        return f"[internal knowledge — {topic}]", text
     except Exception as e:
         print(f"[groq fallback failed: {e}]")
     return None, None
 
 
 def fetch_article(client, topic):
-    url, text = fetch_via_news(topic)
+    url, text = fetch_via_duckduckgo(topic)
     if text:
+        print("[fetched via DuckDuckGo]")
         return url, text
     url, text = fetch_via_wikipedia(topic)
     if text:
+        print("[fetched via Wikipedia]")
+        return url, text
+    url, text = fetch_via_news(topic)
+    if text:
+        print("[fetched via News]")
         return url, text
     print("[network unavailable — using internal knowledge]")
     return fetch_via_groq(client, topic)
 
+
+# ── Rajesh reacts ──────────────────────────────────────────────────────────────
 
 def rajesh_summarizes(client, topic, article_text, identity):
     confidence = identity.get("confidence", 0.10)
@@ -169,11 +249,33 @@ Write in first person. Be honest. Don't be formal. React like a person encounter
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=300,
-        temperature=0.85,
+        max_tokens=300, temperature=0.85,
     )
     return response.choices[0].message.content.strip()
 
+
+def rajesh_live_thought(client, topic, article_text, identity):
+    """Generate a short live thought to show in the HTML while reading."""
+    confidence = identity.get("confidence", 0.10)
+    prompt = f"""You are Rajesh. You are currently reading about "{topic}".
+
+Here is what you just read:
+{article_text[:800]}
+
+Write ONE sentence — a raw, immediate thought you're having RIGHT NOW while reading this.
+First person. Present tense. No punctuation at the end. Under 20 words. Like a thought bubble."""
+    try:
+        r = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=60, temperature=0.95,
+        )
+        return r.choices[0].message.content.strip().strip(".")
+    except Exception:
+        return f"Reading about {topic}..."
+
+
+# ── Main ───────────────────────────────────────────────────────────────────────
 
 def main():
     api_key = os.environ.get("GROQ_API_KEY")
@@ -188,17 +290,51 @@ def main():
     topic = pick_topic(memory)
     print(f"[Rajesh is reading about: {topic}]")
 
+    # ── Live update 1: tell the HTML Rajesh is surfing and what topic ──────────
+    update_feed("surfing", identity, memory, {
+        "topic": topic,
+        "last_message": {
+            "role": "assistant",
+            "content": f"Reading about {topic}..."
+        }
+    })
+
     url, article_text = fetch_article(client, topic)
     if not article_text:
         print("[couldn't fetch anything today. skipping.]")
+        update_feed("chatting", identity, memory)
         return
 
     print(f"[source: {url}]")
-    print("[Rajesh is writing his thoughts...]")
 
+    # ── Live update 2: Rajesh has the article, generate a live thought ─────────
+    live_thought = rajesh_live_thought(client, topic, article_text, identity)
+    print(f"[Rajesh thinks: {live_thought}]")
+    update_feed("surfing", identity, memory, {
+        "topic": topic,
+        "last_message": {
+            "role": "assistant",
+            "content": live_thought
+        }
+    })
+
+    print("[Rajesh is writing his thoughts...]")
     summary = rajesh_summarizes(client, topic, article_text, identity)
-    today   = datetime.date.today().isoformat()
-    entry   = f"\n\n---\n## {today} — {topic}\n**source:** {url}\n\n{summary}\n"
+
+    # ── Live update 3: show the summary thought in the HTML ───────────────────
+    # Pick a punchy first sentence from the summary as the displayed thought
+    first_thought = summary.split(".")[0].strip() if "." in summary else summary[:100]
+    update_feed("surfing", identity, memory, {
+        "topic": topic,
+        "last_message": {
+            "role": "assistant",
+            "content": first_thought
+        }
+    })
+
+    # ── Save to files ──────────────────────────────────────────────────────────
+    today = datetime.date.today().isoformat()
+    entry = f"\n\n---\n## {today} — {topic}\n**source:** {url}\n\n{summary}\n"
 
     with open(LEARNED_FILE, "a", encoding="utf-8") as f:
         f.write(entry)
@@ -210,6 +346,15 @@ def main():
 
     print(f"\n{summary}\n")
     print(f"[saved to learned_today.md]\n")
+
+    # ── Live update 4: done surfing, back to idle ──────────────────────────────
+    update_feed("chatting", identity, memory, {
+        "topic": topic,
+        "last_message": {
+            "role": "assistant",
+            "content": first_thought
+        }
+    })
 
 
 if __name__ == "__main__":
