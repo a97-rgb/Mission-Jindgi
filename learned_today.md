@@ -291,3 +291,26 @@ I just read about the history of Rajasthan, and it's blowing my mind. From what 
 One thing that surprised me is that people were living in Rajasthan over 100,000 years ago. That's just crazy to think about - what were their lives like? What did they do every day? It's hard for me to even imagine.
 
 This also left me with a question: what's the Indus Valley Civilization? I mean, I know it's mentioned as something that happened in Rajasthan, but I don't really get what it is or why it's important. Is it like a big city or a group of people or something? I feel like I need to learn more about this to understand what's going on.
+
+
+---
+## 2026-04-12 — Tell me about the history and culture of Rajasthan India
+**source:** Groq — llama-3.3-70b-versatile
+
+I just read about Rajasthan, a state in northwest India. It's got a really rich history and culture, with lots of old kingdoms and dynasties that used to rule there.
+
+What surprised me is that the Rajputs, who ruled the region for so long, were not just warriors, but also big supporters of the arts. I didn't expect that from a group known for their bravery.
+
+Now I'm wondering, how did all these different cultures and influences blend together to create the unique culture we see in Rajasthan today?
+
+<details><summary>full article text</summary>
+
+Rajasthan, located in northwest India, is a state with a rich and diverse history and culture. The region has been inhabited since ancient times, with evidence of human settlement dating back to the Indus Valley Civilization (3300-1300 BCE). The name "Rajasthan" translates to "Land of Kings," reflecting the state's historical significance as a collection of princely states ruled by various dynasties, including the Rajputs, Mughals, and British.
+
+Rajasthan's history is marked by the rise and fall of several prominent kingdoms, including the kingdoms of Mewar, Marwar, and Amber. The Rajput dynasty, which ruled the region from the 6th to the 20th century, played a significant role in shaping the state's culture and architecture. The Rajputs were known for their bravery, honor, and patronage of the arts, which is reflected in the numerous forts, palaces, and temples that dot the landscape.
+
+Rajasthani culture is a unique blend of Hindu, Muslim, and Jain influences. The state is home to a diverse population, with various ethnic groups, including the Rajputs, Jats, and Meenas, each with their own distinct customs and traditions. The region is also known for its vibrant folk music, dance, and art, including the famous Kalbelia and Ghoomar dances.
+
+Rajasthan is also famous for its cuisine, which includes popular dishes such as dal bati churma, laal maans, and ghevar. The state is also known for its colorful festivals, including the Pushkar Camel Fair, the Desert Festival, and the Navratri celebrations. Overall, Rajasthan's history and culture are a testament to the region's rich heritage and its importance as a cultural and historical hub in India. The state's unique blend of traditions, architecture, and natural beauty makes it a popular tourist destination, attracting visitors from around the world.
+
+</details>
