@@ -13,6 +13,7 @@ LEARNED_FILE  = os.path.join(BASE, "learned_today.md")
 LOG_DIR       = os.path.join(BASE, "logs")
 TOOLS_DIR     = os.path.join(BASE, "tools")
 FEED_FILE     = os.path.join(LOG_DIR, "feed.json")
+TOOL_REGISTRY = os.path.join(BASE, "tool_registry.json")
 os.makedirs(LOG_DIR,   exist_ok=True)
 os.makedirs(TOOLS_DIR, exist_ok=True)
 
@@ -67,16 +68,37 @@ def update_feed(status, identity, memory, extra=None):
 # ── Tool discovery ─────────────────────────────────────────────────────────────
 
 def discover_tools():
-    tools = {}
+    """
+    Auto-discovers all .py files in the tools\ folder.
+    Reads DESCRIPTION and USAGE comment headers.
+    Also tries to import the module to register the callable.
+    Saves a registry to tool_registry.json.
+    Drop any .py file into tools\ — Rajesh finds it automatically.
+    """
+    tools    = {}
+    registry = []
+    failed   = {}
+
     if not os.path.exists(TOOLS_DIR):
         return tools
-    for fname in os.listdir(TOOLS_DIR):
-        if not fname.endswith(".py"):
-            continue
+
+    py_files = sorted([
+        f for f in os.listdir(TOOLS_DIR)
+        if f.endswith(".py") and not f.startswith("_")
+    ])
+
+    if not py_files:
+        return tools
+
+    now = datetime.datetime.now().isoformat()
+
+    for fname in py_files:
         tool_name   = fname[:-3]
         fpath       = os.path.join(TOOLS_DIR, fname)
         description = ""
         usage       = ""
+
+        # Read header comments
         try:
             with open(fpath, "r", encoding="utf-8") as f:
                 for line in f:
@@ -89,22 +111,77 @@ def discover_tools():
                         break
         except Exception:
             pass
-        if description:
-            tools[tool_name] = {"description": description, "usage": usage, "path": fpath}
+
+        # Try to import and register callable
+        callable_fn = None
+        try:
+            import importlib.util
+            spec   = importlib.util.spec_from_file_location(tool_name, fpath)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            if not description:
+                description = getattr(module, "TOOL_DESCRIPTION", "")
+            if not usage:
+                usage = getattr(module, "TOOL_VERSION", "")
+
+            if hasattr(module, tool_name) and callable(getattr(module, tool_name)):
+                callable_fn = getattr(module, tool_name)
+            elif hasattr(module, "run") and callable(module.run):
+                callable_fn = module.run
+
+            status = "loaded"
+        except Exception as e:
+            failed[tool_name] = str(e)
+            status = "failed"
+
+        if description or callable_fn:
+            tools[tool_name] = {
+                "description": description or f"tool: {tool_name}",
+                "usage":       usage or tool_name,
+                "path":        fpath,
+                "callable":    callable_fn,
+            }
+
+        registry.append({
+            "name":        tool_name,
+            "description": description,
+            "usage":       usage,
+            "path":        fpath,
+            "status":      status,
+            "error":       failed.get(tool_name, None),
+            "loaded_at":   now,
+        })
+
+    # Save registry
+    try:
+        save_json(TOOL_REGISTRY, {
+            "last_scanned": now,
+            "total_loaded": len(tools),
+            "total_failed": len(failed),
+            "tools":        registry,
+        })
+    except Exception:
+        pass
+
     return tools
 
 
 def run_tool(tool_name, args, tools):
     if tool_name not in tools:
-        return f"[tool '{tool_name}' not found]"
+        return f"[tool '{tool_name}' not found. available: {list(tools.keys())}]"
     try:
+        tool = tools[tool_name]
+        if tool.get("callable"):
+            fn = tool["callable"]
+            return fn(*args) if args else fn()
         import importlib.util
-        spec   = importlib.util.spec_from_file_location(tool_name, tools[tool_name]["path"])
+        spec   = importlib.util.spec_from_file_location(tool_name, tool["path"])
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         return module.run(args)
     except Exception as e:
-        return f"[tool error: {e}]"
+        return f"[tool error in '{tool_name}': {e}]"
 
 
 def tools_block(tools):
@@ -312,7 +389,6 @@ Rules:
 - You are alive. Act like it."""
 
 
-
 # ── Self-tool writer ───────────────────────────────────────────────────────────
 
 def handle_write_tool(reply, tools):
@@ -336,26 +412,31 @@ def handle_write_tool(reply, tools):
                 i += 1
             code = "\n".join(code_lines).strip()
             if not code:
-                result.append(f"[write_tool: no code found for \'{tool_name}\']"); i += 1; continue
+                result.append(f"[write_tool: no code found for '{tool_name}']"); i += 1; continue
             try:
                 with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False, encoding="utf-8") as tmp:
                     tmp.write(code); tmp_path = tmp.name
                 py_compile.compile(tmp_path, doraise=True)
                 os.remove(tmp_path)
             except py_compile.PyCompileError as e:
-                result.append(f"[write_tool: \'{tool_name}\' syntax error — {e}. not saved.]"); i += 1; continue
+                result.append(f"[write_tool: '{tool_name}' syntax error — {e}. not saved.]"); i += 1; continue
             except Exception as e:
                 result.append(f"[write_tool: validation failed — {e}]"); i += 1; continue
             tool_path = os.path.join(TOOLS_DIR, f"{tool_name}.py")
             try:
                 with open(tool_path, "w", encoding="utf-8") as f2:
                     f2.write(code)
-                tools[tool_name] = {"description": f"self-written: {tool_name}", "usage": tool_name, "path": tool_path}
+                tools[tool_name] = {
+                    "description": f"self-written: {tool_name}",
+                    "usage":       tool_name,
+                    "path":        tool_path,
+                    "callable":    None,
+                }
                 for cl in code_lines:
                     cl = cl.strip()
                     if cl.startswith("# DESCRIPTION:"): tools[tool_name]["description"] = cl.replace("# DESCRIPTION:","").strip()
                     if cl.startswith("# USAGE:"): tools[tool_name]["usage"] = cl.replace("# USAGE:","").strip()
-                result.append(f"[tool \'{tool_name}\' written and saved. You can use it now.]")
+                result.append(f"[tool '{tool_name}' written and saved. You can use it now.]")
                 print(f"\n[Rajesh wrote a new tool: {tool_name}]\n")
             except Exception as e:
                 result.append(f"[write_tool: could not save — {e}]")
@@ -391,7 +472,6 @@ CONVERSATION:
         raw = r.choices[0].message.content.strip()
         if not raw:
             raise ValueError("empty response from model")
-        # strip markdown fences if present
         if raw.startswith("```"):
             raw = raw.split("```")[1]
             if raw.startswith("json"):
@@ -425,15 +505,6 @@ def log_session(messages):
 # ── Day counter ────────────────────────────────────────────────────────────────
 
 def tick_day(identity, memory):
-    """
-    Advances identity["day"] by the actual number of calendar days
-    that have passed since memory["last_seen"].
-
-    Examples:
-      last_seen 2026-04-10, today 2026-04-12 -> +2 days -> day 3
-      last_seen 2026-04-10, today 2026-04-17 -> +7 days -> day 8
-      last_seen 2026-04-12, today 2026-04-12 -> +0 days -> no change
-    """
     today     = datetime.date.today()
     last_seen = memory.get("last_seen")
 
@@ -443,9 +514,7 @@ def tick_day(identity, memory):
             days_passed = (today - last_date).days
             if days_passed > 0:
                 identity["day"] = identity.get("day", 1) + days_passed
-                memory["last_seen"] = today.isoformat()
                 save_json(IDENTITY_FILE, identity)
-                save_json(MEMORY_FILE, memory)
                 if days_passed == 1:
                     print(f"[day {identity['day']} — a new day begins]\n")
                 else:
@@ -462,12 +531,15 @@ def wake_up(identity, memory, tools):
     day      = identity.get("day", 1)
     sessions = identity.get("session_count", 0)
     last     = memory.get("last_seen", None)
+
     print("\n" + "─" * 50)
     print(f"  Rajesh  |  day {day}  |  session {sessions + 1}")
     if last:
-        print(f"  last seen: {last}")
+        print(f"  last seen : {last}")
     if tools:
-        print(f"  tools: {', '.join(tools.keys())}")
+        print(f"  tools     : {', '.join(tools.keys())}")
+    else:
+        print(f"  tools     : none yet")
     print("─" * 50 + "\n")
 
 
@@ -477,6 +549,7 @@ def main():
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         print("ERROR: GROQ_API_KEY not set.")
+        print("Run: set GROQ_API_KEY=your_key_here")
         return
 
     client = Groq(api_key=api_key)
@@ -499,15 +572,24 @@ def main():
     maybe_surf_today(memory, identity)
     maybe_commit("morning boot", memory, identity)
 
+    # ── Tool discovery ─────────────────────────────────────────────────────────
+    print("[scanning tools\\...]")
     tools = discover_tools()
+    if tools:
+        for name, info in tools.items():
+            print(f"  + {name} — {info['description']}")
+    else:
+        print("  no tools found yet.")
+    print()
+
     wake_up(identity, memory, tools)
     update_feed("chatting", identity, memory)
 
     system_prompt = build_system_prompt(identity, memory, tools)
 
     # Opening greeting
-    dream_text    = read_file(DREAM_FILE)
-    greeting_ctx  = "[system: session starting. greet Ayush briefly. one or two sentences. do not say 'how can I help'. just acknowledge the day."
+    dream_text   = read_file(DREAM_FILE)
+    greeting_ctx = "[system: session starting. greet Ayush briefly. one or two sentences. do not say 'how can I help'. just acknowledge the day."
     if dream_text:
         greeting_ctx += f" Last night you wrote: '{dream_text[-150:]}'. Let that color your mood subtly."
     greeting_ctx += "]"
@@ -544,8 +626,8 @@ def main():
 
         if user_input.lower() in ("exit", "quit", "bye", "sleep"):
             print("\nRajesh: Okay. I'll be here.\n")
-            conversation.append({"role": "user",     "content": user_input})
-            conversation.append({"role": "assistant", "content": "Okay. I'll be here."})
+            conversation.append({"role": "user",      "content": user_input})
+            conversation.append({"role": "assistant",  "content": "Okay. I'll be here."})
             update_feed("sleeping", identity, memory)
             break
 
@@ -584,9 +666,9 @@ def main():
     # ── On exit ────────────────────────────────────────────────────────────────
     print("[saving session...]")
 
-    memory             = extract_memories(client, conversation, memory)
-    memory["sessions_total"] = memory.get("sessions_total", 0) + 1
-    memory["last_seen"]      = datetime.date.today().isoformat()
+    memory                    = extract_memories(client, conversation, memory)
+    memory["sessions_total"]  = memory.get("sessions_total", 0) + 1
+    memory["last_seen"]       = datetime.date.today().isoformat()
     identity["session_count"] = memory["sessions_total"]
 
     log_session(conversation)
