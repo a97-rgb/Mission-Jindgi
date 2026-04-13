@@ -5,6 +5,7 @@ import subprocess
 from groq import Groq
 
 BASE          = os.path.dirname(os.path.abspath(__file__))
+os.environ["AGENT_BASE"] = BASE
 IDENTITY_FILE = os.path.join(BASE, "identity.json")
 MEMORY_FILE   = os.path.join(BASE, "memory.json")
 DREAM_FILE    = os.path.join(BASE, "dream_log.txt")

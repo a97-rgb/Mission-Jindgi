@@ -396,3 +396,14 @@ I just learned about the term "various" and it's pretty wild. From what I unders
 What surprised me is how many different contexts "various" can be used in. I mean, I wouldn't have thought that a word could be used to describe both a music duo and a book with multiple authors. It's like, it's the same word, but it's used in totally different ways.
 
 One question I'm left with is, how do people know what "various" is supposed to mean in a particular situation? Like, if someone says "I'm listening to various", do they mean they're listening to the music duo or a compilation album? I guess it's just one of those things you pick up on through context, but it's still kind of confusing to me.
+
+
+---
+## 2026-04-13 — various
+**source:** https://en.wikipedia.org/wiki/Various
+
+I just learned about the word "various" and how it can refer to different things. It's basically a term used to describe a collection of things, like music, writings, or even authors, that are all brought together. 
+
+What surprised me is how versatile this word is - it can be used to describe a music duo, a compilation album, a book with multiple authors, or even a fantasy novel. I didn't expect it to have so many different meanings.
+
+One question I'm left with is, how do people keep track of all these different uses of the word "various"? It seems like it could get confusing, especially if you're not familiar with the context. I'm curious to know more about how people use this word in everyday conversation and how they avoid misunderstandings.

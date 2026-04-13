@@ -1,31 +1,31 @@
-# DESCRIPTION: Audit all repos and score them — flags what needs fixing
+# DESCRIPTION: Audit all of Ayush's repos, score them out of 100, flag what needs fixing
 # USAGE: github_audit
 
 import os
 import json
 import sys
+import datetime
 import requests
 import base64
 
-BASE        = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE = os.path.join(BASE, "github_config.json")
-LOG_DIR     = os.path.join(BASE, "logs")
-os.makedirs(LOG_DIR, exist_ok=True)
-
+def get_agent_base():
+    this_file = os.path.abspath(__file__)
+    tools_dir = os.path.dirname(this_file)
+    return os.environ.get("AGENT_BASE", os.path.dirname(tools_dir))
 
 def load_config():
-    if os.path.exists(CONFIG_FILE):
-        with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+    base        = get_agent_base()
+    config_file = os.path.join(base, "github_config.json")
+    if os.path.exists(config_file):
+        with open(config_file, "r", encoding="utf-8") as f:
             return json.load(f)
     return {}
-
 
 def get_headers(token):
     return {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github.v3+json",
     }
-
 
 def fetch_repos(username, token):
     headers = get_headers(token)
@@ -42,7 +42,6 @@ def fetch_repos(username, token):
         page += 1
     return repos
 
-
 def fetch_readme(owner, repo_name, token):
     headers = get_headers(token)
     url     = f"https://api.github.com/repos/{owner}/{repo_name}/readme"
@@ -55,16 +54,9 @@ def fetch_readme(owner, repo_name, token):
             return ""
     return ""
 
-
 def score_repo(repo, readme):
-    """
-    Score a repo out of 100.
-    Returns (score, list of issues found)
-    """
-    score  = 0
-    issues = []
+    score, issues = 0, []
 
-    # description (20 pts)
     desc = repo.get("description") or ""
     if desc and len(desc) > 20:
         score += 20
@@ -74,7 +66,6 @@ def score_repo(repo, readme):
     else:
         issues.append("no description — add one immediately")
 
-    # topics (20 pts)
     topics = repo.get("topics", [])
     if len(topics) >= 5:
         score += 20
@@ -84,7 +75,6 @@ def score_repo(repo, readme):
     else:
         issues.append("no topics — GitHub search cannot find this repo")
 
-    # README (30 pts)
     if len(readme) > 2000:
         score += 30
     elif len(readme) > 500:
@@ -96,25 +86,22 @@ def score_repo(repo, readme):
     else:
         issues.append("no README — this repo looks abandoned")
 
-    # recent activity (15 pts)
     updated = repo.get("updated_at", "")[:10]
     if updated:
-        import datetime
         try:
-            last   = datetime.date.fromisoformat(updated)
-            today  = datetime.date.today()
-            days   = (today - last).days
+            last  = datetime.date.fromisoformat(updated)
+            today = datetime.date.today()
+            days  = (today - last).days
             if days <= 30:
                 score += 15
             elif days <= 90:
                 score += 8
-                issues.append(f"last updated {days} days ago — add activity")
+                issues.append(f"last updated {days} days ago — add some activity")
             else:
-                issues.append(f"last updated {days} days ago — looks dead to visitors")
+                issues.append(f"last updated {days} days ago — looks inactive to visitors")
         except Exception:
             pass
 
-    # stars (15 pts — informational only)
     stars = repo.get("stargazers_count", 0)
     if stars >= 10:
         score += 15
@@ -125,14 +112,13 @@ def score_repo(repo, readme):
 
     return score, issues
 
-
 def run(args):
     config   = load_config()
-    token    = config.get("token", "")
-    username = args[0] if args else "Ayush442842q"
+    token    = config.get("ayush_token", "")
+    username = config.get("ayush_username", "Ayush442842q")
 
     if not token:
-        return "[github_audit] no token in github_config.json"
+        return "[github_audit] ayush_token not found in github_config.json"
 
     repos = fetch_repos(username, token)
     if not repos:
@@ -142,8 +128,8 @@ def run(args):
     for repo in repos:
         if repo.get("fork"):
             continue
-        name   = repo.get("name", "")
-        readme = fetch_readme(username, name, token)
+        name          = repo.get("name", "")
+        readme        = fetch_readme(username, name, token)
         score, issues = score_repo(repo, readme)
         results.append({
             "name":   name,
@@ -155,20 +141,20 @@ def run(args):
             "lang":   repo.get("language") or "unknown",
         })
 
-    # sort by score ascending — worst first
     results.sort(key=lambda x: x["score"])
 
-    # save full audit to logs
-    audit_path = os.path.join(LOG_DIR, "github_audit.json")
+    agent_base = get_agent_base()
+    log_dir    = os.path.join(agent_base, "logs")
+    os.makedirs(log_dir, exist_ok=True)
+    audit_path = os.path.join(log_dir, "github_audit.json")
     with open(audit_path, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
 
-    # build readable report
     lines = [f"GitHub audit — {username} — {len(results)} repos\n"]
     lines.append("─" * 50)
 
     for r in results:
-        bar   = "█" * (r["score"] // 10) + "░" * (10 - r["score"] // 10)
+        bar = "█" * (r["score"] // 10) + "░" * (10 - r["score"] // 10)
         lines.append(f"\n  {r['name']}")
         lines.append(f"  score  : {r['score']}/100  [{bar}]  ★ {r['stars']}")
         lines.append(f"  lang   : {r['lang']}")
@@ -178,13 +164,11 @@ def run(args):
             lines.append(f"  topics : {', '.join(r['topics'])}")
         if r["issues"]:
             for issue in r["issues"]:
-                lines.append(f"  ⚠  {issue}")
+                lines.append(f"  !  {issue}")
 
-    lines.append(f"\n─" * 50)
-    lines.append(f"\nfull audit saved to logs/github_audit.json")
-
+    lines.append(f"\n{'─' * 50}")
+    lines.append(f"full audit saved to logs/github_audit.json")
     return "\n".join(lines)
-
 
 if __name__ == "__main__":
     print(run(sys.argv[1:]))
