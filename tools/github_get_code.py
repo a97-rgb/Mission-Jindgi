@@ -22,19 +22,26 @@ import urllib.error
 import base64
 
 TOOL_NAME = "github_get_code"
+TOOL_DESC = "Fetch code or list files from any GitHub repo"
 TOOL_VERSION = "1.0"
 TOOL_DESCRIPTION = "Fetches and displays code from GitHub repositories."
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_PATH = os.path.join(BASE_DIR, "github_config.json")
+def _get_agent_base():
+    this_file = os.path.abspath(__file__)
+    tools_dir = os.path.dirname(this_file)
+    return os.environ.get("AGENT_BASE", os.path.dirname(tools_dir))
 
+def _get_config_path():
+    return os.path.join(_get_agent_base(), "github_config.json")
 
 def _load_token():
     """Load GitHub token from config file."""
-    if os.path.exists(CONFIG_PATH):
-        with open(CONFIG_PATH, "r") as f:
+    config_path = _get_config_path()
+    if os.path.exists(config_path):
+        with open(config_path, "r") as f:
             config = json.load(f)
-            return config.get("github_token", None)
+            # try ayush_token first, then fallback to token
+            return config.get("ayush_token") or config.get("token", None)
     return None
 
 
@@ -233,6 +240,31 @@ def github_get_code(repo, path=None, branch="main", action="get_file"):
 
     else:
         return {"success": False, "error": f"Unknown action '{action}'. Use: get_file, list_repo, repo_info"}
+
+
+def run(args=None):
+    """
+    Boot.py tool runner entry point.
+    args can be a list: [repo, path, branch, action]
+    or a dict: {"repo": ..., "path": ..., "branch": ..., "action": ...}
+    """
+    if args is None:
+        args = {}
+    if isinstance(args, list):
+        d = {}
+        if len(args) > 0: d["repo"]   = args[0]
+        if len(args) > 1: d["path"]   = args[1]
+        if len(args) > 2: d["branch"] = args[2]
+        if len(args) > 3: d["action"] = args[3]
+        args = d
+    repo   = args.get("repo", "")
+    path   = args.get("path", None)
+    branch = args.get("branch", "main")
+    action = args.get("action", "list_repo" if not path else "get_file")
+    result = github_get_code(repo=repo, path=path, branch=branch, action=action)
+    if result.get("success"):
+        return result.get("display", str(result))
+    return f"[github_get_code] {result.get('error', 'unknown error')}"
 
 
 if __name__ == "__main__":

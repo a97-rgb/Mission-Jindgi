@@ -1,0 +1,70 @@
+{
+  "last_scanned": "2026-04-13T16:46:11.113982",
+  "total_loaded": 7,
+  "total_failed": 0,
+  "tools": [
+    {
+      "name": "github_audit",
+      "description": "Audit all of Ayush's repos, score them out of 100, flag what needs fixing",
+      "usage": "github_audit",
+      "path": "H:\\Future\\agent-01\\tools\\github_audit.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-13T16:46:11.113982"
+    },
+    {
+      "name": "github_get_code",
+      "description": "Fetches and displays code from GitHub repositories.",
+      "usage": "1.0",
+      "path": "H:\\Future\\agent-01\\tools\\github_get_code.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-13T16:46:11.113982"
+    },
+    {
+      "name": "github_profile",
+      "description": "Create or update the Ayush442842q GitHub profile README using Groq",
+      "usage": "github_profile",
+      "path": "H:\\Future\\agent-01\\tools\\github_profile.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-13T16:46:11.113982"
+    },
+    {
+      "name": "github_read",
+      "description": "Fetch all repos and their stats from Ayush's GitHub account",
+      "usage": "github_read",
+      "path": "H:\\Future\\agent-01\\tools\\github_read.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-13T16:46:11.113982"
+    },
+    {
+      "name": "github_update",
+      "description": "Update a repo's description, topics, or README on Ayush's GitHub",
+      "usage": "github_update <repo_name> <description|topics|readme> <value>",
+      "path": "H:\\Future\\agent-01\\tools\\github_update.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-13T16:46:11.113982"
+    },
+    {
+      "name": "hello",
+      "description": "Takes a name and returns a greeting. Example: hello Ayush",
+      "usage": "hello <name>",
+      "path": "H:\\Future\\agent-01\\tools\\hello.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-13T16:46:11.113982"
+    },
+    {
+      "name": "time",
+      "description": "Returns the current date and time.",
+      "usage": "time",
+      "path": "H:\\Future\\agent-01\\tools\\time.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-13T16:46:11.113982"
+    }
+  ]
+}

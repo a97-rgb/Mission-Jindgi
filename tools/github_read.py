@@ -40,7 +40,7 @@ def fetch_repos(username, token):
         page += 1
     return repos, None
 
-def run(args):
+def run(args=None):
     config   = load_config()
     token    = config.get("ayush_token", "")
     username = config.get("ayush_username", "Ayush442842q")

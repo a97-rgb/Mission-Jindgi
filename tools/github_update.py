@@ -64,7 +64,7 @@ def update_readme(owner, repo, content, token, message=None):
         return f"README {'updated' if sha else 'created'} for {repo}"
     return f"failed: {r_put.status_code} {r_put.text[:200]}"
 
-def run(args):
+def run(args=None):
     config   = load_config()
     token    = config.get("ayush_token", "")
     owner    = config.get("ayush_username", "Ayush442842q")

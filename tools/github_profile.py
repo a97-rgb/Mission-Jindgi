@@ -107,7 +107,7 @@ Requirements:
     )
     return r.choices[0].message.content.strip()
 
-def run(args):
+def run(args=None):
     config  = load_config()
     token   = config.get("ayush_token", "")
     owner   = config.get("ayush_username", "Ayush442842q")
