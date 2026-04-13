@@ -385,3 +385,14 @@ The Fermi Paradox raises several questions, including: Are we alone in the unive
 The search for extraterrestrial intelligence (SETI) has been ongoing for decades, with scientists using a variety of methods to detect signs of life, including radio telescopes, optical telescopes, and spacecraft. While there have been some intriguing discoveries, such as the detection of exoplanets and the discovery of biosignatures in the atmospheres of some planets, there is currently no conclusive evidence of intelligent extraterrestrial life.
 
 </details>
+
+
+---
+## 2026-04-13 — various
+**source:** https://en.wikipedia.org/wiki/Various
+
+I just learned about the term "various" and it's pretty wild. From what I understand, it's like a catch-all phrase that can refer to a bunch of different things, like music, books, or artists. It's used to describe a collection of stuff made by different people.
+
+What surprised me is how many different contexts "various" can be used in. I mean, I wouldn't have thought that a word could be used to describe both a music duo and a book with multiple authors. It's like, it's the same word, but it's used in totally different ways.
+
+One question I'm left with is, how do people know what "various" is supposed to mean in a particular situation? Like, if someone says "I'm listening to various", do they mean they're listening to the music duo or a compilation album? I guess it's just one of those things you pick up on through context, but it's still kind of confusing to me.
