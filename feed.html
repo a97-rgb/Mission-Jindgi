@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rajesh — Live Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080810;
+  --surface:  #0e0e1a;
+  --border:   #1e1e35;
+  --accent:   #6c63ff;
+  --accent2:  #ff6584;
+  --green:    #00e5a0;
+  --amber:    #ffb800;
+  --text:     #c8c8e0;
+  --muted:    #555570;
+  --bright:   #eeeeff;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  padding: 24px;
+  font-size: 13px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 12px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.4;
+}
+
+.card-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+/* ── HEADER ── */
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+}
+
+.header-left { display: flex; align-items: center; gap: 20px; }
+
+.name {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--bright);
+  letter-spacing: .04em;
+}
+
+.day-badge {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(108,99,255,.12);
+  border: 1px solid rgba(108,99,255,.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+.session-badge {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.header-right { display: flex; align-items: center; gap: 12px; }
+
+.clock {
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0,229,160,.08);
+  border: 1px solid rgba(0,229,160,.2);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-dot.amber { background: var(--amber); }
+.status-dot.dim   { background: var(--muted); animation: none; }
+.status-dot.red   { background: var(--accent2); }
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .4; transform: scale(.8); }
+}
+
+/* ── THOUGHTS ── */
+.thoughts-card { grid-column: 1 / 3; }
+
+.thought-row {
+  display: flex;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.thought-row:last-child { border-bottom: none; }
+
+.thought-role {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.thought-role.assistant {
+  color: var(--accent);
+  background: rgba(108,99,255,.12);
+  border: 1px solid rgba(108,99,255,.25);
+}
+
+.thought-role.user {
+  color: var(--amber);
+  background: rgba(255,184,0,.1);
+  border: 1px solid rgba(255,184,0,.2);
+}
+
+.thought-content {
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 12px;
+}
+
+.empty-thoughts {
+  color: var(--muted);
+  font-style: italic;
+  padding: 8px 0;
+}
+
+/* ── STATUS CARD ── */
+.status-card { }
+
+.status-big {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bright);
+  margin-bottom: 6px;
+}
+
+.tool-running {
+  font-size: 11px;
+  color: var(--accent2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.tool-running::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent2);
+  animation: pulse 1s infinite;
+}
+
+.topic-line {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.surf-countdown {
+  margin-top: 14px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.surf-countdown span {
+  color: var(--green);
+  font-weight: 700;
+}
+
+/* ── PERSONALITY ── */
+.personality-card { grid-column: 1 / 2; }
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.stat-row:last-child { margin-bottom: 0; }
+
+.stat-name {
+  width: 72px;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .06em;
+  flex-shrink: 0;
+}
+
+.stat-track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
+  transition: width 1s ease;
+}
+
+.stat-fill.green  { background: var(--green); }
+.stat-fill.amber  { background: var(--amber); }
+.stat-fill.pink   { background: var(--accent2); }
+
+.stat-val {
+  width: 32px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── MEMORY ── */
+.memory-card { grid-column: 2 / 3; }
+
+.mem-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+.mem-row:last-child { border-bottom: none; }
+
+.mem-key   { font-size: 11px; color: var(--muted); }
+.mem-val   {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bright);
+}
+
+/* ── GITHUB ── */
+.github-card { grid-column: 3 / 4; grid-row: 2 / 4; }
+
+.stars-big {
+  font-family: 'Syne', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--amber);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stars-label {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.repo-row {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.repo-row:last-child { border-bottom: none; }
+
+.repo-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bright);
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.score-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+.score-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.no-audit {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: italic;
+  margin-top: 8px;
+  line-height: 1.7;
+}
+
+/* ── LEARNED ── */
+.learned-card { grid-column: 1 / 3; }
+
+.topic-pill {
+  display: inline-block;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  margin: 3px 4px 3px 0;
+  letter-spacing: .04em;
+  transition: all .3s;
+}
+
+.topic-pill.today {
+  color: var(--green);
+  border-color: rgba(0,229,160,.3);
+  background: rgba(0,229,160,.06);
+}
+
+/* ── DREAM ── */
+.dream-card { grid-column: 1 / -1; }
+
+.dream-text {
+  font-style: italic;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 12px;
+  border-left: 2px solid var(--accent);
+  padding-left: 14px;
+}
+
+/* ── OFFLINE ── */
+.offline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.offline .name {
+  opacity: .3;
+}
+
+.offline-msg {
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="offline">
+    <div class="name">RAJESH</div>
+    <div class="offline-msg">waiting for boot.py to start...</div>
+  </div>
+</div>
+
+<script>
+const STATUS_ICONS = {
+  booting:    '◉  booting up',
+  surfing:    '◎  reading the internet',
+  chatting:   '●  talking to Ayush',
+  dreaming:   '◌  dreaming',
+  committing: '△  writing to GitHub',
+  thinking:   '◈  processing',
+  idle:       '○  idle',
+  sleeping:   '—  session ended',
+};
+
+const STATUS_DOT = {
+  booting:    'amber',
+  surfing:    '',
+  chatting:   '',
+  dreaming:   'amber',
+  committing: 'amber',
+  thinking:   '',
+  idle:       'dim',
+  sleeping:   'dim',
+};
+
+const STAT_COLORS = ['', 'green', 'amber', 'pink', ''];
+
+let thoughtHistory = [];
+let lastMsgContent = null;
+let auditData      = null;
+let learnedTopics  = [];
+
+async function fetchFeed() {
+  try {
+    const r = await fetch('./logs/feed.json?t=' + Date.now());
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; }
+}
+
+async function fetchAudit() {
+  try {
+    const r = await fetch('./logs/github_audit.json?t=' + Date.now());
+    if (!r.ok) return null;
+    return await r.json();
+  } catch { return null; }
+}
+
+async function fetchLearned() {
+  try {
+    const r = await fetch('./learned_today.md?t=' + Date.now());
+    if (!r.ok) return [];
+    const text  = await r.text();
+    const today = new Date().toISOString().slice(0, 10);
+    const topics = [];
+    text.split('\n').forEach(line => {
+      const m = line.match(/^## (\d{4}-\d{2}-\d{2}) — (.+)/);
+      if (m && m[1] === today) {
+        const t = m[2].trim();
+        if (t && !topics.includes(t)) topics.push(t);
+      }
+    });
+    return topics;
+  } catch { return []; }
+}
+
+function scoreColor(score) {
+  if (score >= 70) return '#00e5a0';
+  if (score >= 45) return '#ffb800';
+  return '#ff6584';
+}
+
+function trunc(s, n) {
+  return s && s.length > n ? s.slice(0, n) + '...' : (s || '');
+}
+
+function clockStr() {
+  return new Date().toLocaleTimeString('en-GB');
+}
+
+function render(feed) {
+  const identity = feed.identity || {};
+  const memory   = feed.memory   || {};
+  const status   = feed.status   || 'unknown';
+  const day      = identity.day  || 1;
+  const sessions = identity.session_count || 0;
+
+  // update thought history
+  const msg = feed.last_message;
+  if (msg && msg.content && msg.content !== lastMsgContent) {
+    lastMsgContent = msg.content;
+    thoughtHistory.push(msg);
+    if (thoughtHistory.length > 3) thoughtHistory.shift();
+  }
+
+  const dotClass  = STATUS_DOT[status] || '';
+  const statusStr = STATUS_ICONS[status] || status;
+
+  // personality stats
+  const stats = [
+    { name: 'curiosity',   val: identity.curiosity            || 0, color: '' },
+    { name: 'confidence',  val: identity.confidence           || 0, color: 'green' },
+    { name: 'verbosity',   val: identity.verbosity            || 0, color: 'amber' },
+    { name: 'opinion',     val: identity.opinion_strength     || 0, color: 'pink' },
+    { name: 'attachment',  val: identity.attachment_to_ayush  || 0, color: '' },
+  ];
+
+  const statsHTML = stats.map(s => `
+    <div class="stat-row">
+      <div class="stat-name">${s.name}</div>
+      <div class="stat-track">
+        <div class="stat-fill ${s.color}" style="width:${(s.val*100).toFixed(1)}%"></div>
+      </div>
+      <div class="stat-val">${s.val.toFixed(2)}</div>
+    </div>
+  `).join('');
+
+  // thoughts
+  const thoughtsHTML = thoughtHistory.length
+    ? thoughtHistory.map(t => `
+        <div class="thought-row">
+          <div class="thought-role ${t.role}">${t.role === 'assistant' ? 'Rajesh' : 'Ayush'}</div>
+          <div class="thought-content">${trunc(t.content, 140)}</div>
+        </div>
+      `).join('')
+    : '<div class="empty-thoughts">nothing yet this session</div>';
+
+  // tool running
+  const toolHTML = feed.current_tool
+    ? `<div class="tool-running">running ${feed.current_tool}</div>`
+    : '';
+
+  // topic
+  const topicHTML = feed.topic
+    ? `<div class="topic-line">reading: ${trunc(feed.topic, 60)}</div>`
+    : '';
+
+  // countdown
+  let countdownHTML = '';
+  if (feed.next_surf_in != null) {
+    const m = Math.floor(feed.next_surf_in / 60);
+    const s = Math.floor(feed.next_surf_in % 60);
+    countdownHTML = `<div class="surf-countdown">next surf in <span>${m}m ${s}s</span></div>`;
+  }
+
+  // github
+  let githubHTML = '';
+  if (auditData && auditData.length) {
+    const total  = auditData.reduce((a, r) => a + (r.stars || 0), 0);
+    const sorted = [...auditData].sort((a, b) => b.score - a.score);
+    const top3   = sorted.slice(0, 3);
+    const worst  = sorted[sorted.length - 1];
+    githubHTML = `
+      <div class="stars-big">★ ${total}</div>
+      <div class="stars-label">total stars across all repos</div>
+      ${top3.map(r => `
+        <div class="repo-row">
+          <div class="repo-name">${r.name}</div>
+          <div class="score-track">
+            <div class="score-fill" style="width:${r.score}%;background:${scoreColor(r.score)}"></div>
+          </div>
+          <div class="score-meta">
+            <span>${r.score}/100</span>
+            <span>★ ${r.stars}</span>
+          </div>
+        </div>
+      `).join('')}
+      ${worst && worst !== top3[top3.length-1] ? `
+        <div class="repo-row" style="opacity:.6">
+          <div class="repo-name" style="color:#ff6584">⚠ ${worst.name}</div>
+          <div class="score-track">
+            <div class="score-fill" style="width:${worst.score}%;background:#ff6584"></div>
+          </div>
+          <div class="score-meta"><span>needs work — ${worst.score}/100</span></div>
+        </div>
+      ` : ''}
+    `;
+  } else {
+    githubHTML = `<div class="no-audit">no audit data yet.<br>tell Rajesh to audit your github repos.</div>`;
+  }
+
+  // learned today
+  const learnedHTML = learnedTopics.length
+    ? learnedTopics.map(t => `<span class="topic-pill today">${t}</span>`).join('')
+    : '<span class="topic-pill">nothing yet today</span>';
+
+  // dream
+  const dreamHTML = feed.dream_snippet
+    ? `<div class="dream-text">"${trunc(feed.dream_snippet, 220)}"</div>`
+    : '<div class="dream-text" style="opacity:.4">no dream recorded yet</div>';
+
+  document.getElementById('app').innerHTML = `
+    <div class="grid">
+
+      <div class="header">
+        <div class="header-left">
+          <div class="name">RAJESH</div>
+          <div class="day-badge">day ${day}</div>
+          <div class="session-badge">session ${sessions}</div>
+        </div>
+        <div class="header-right">
+          <div class="clock" id="clock">${clockStr()}</div>
+          <div class="status-pill">
+            <div class="status-dot ${dotClass}"></div>
+            ${statusStr}
+          </div>
+        </div>
+      </div>
+
+      <div class="card thoughts-card">
+        <div class="card-label">recent thoughts</div>
+        ${thoughtsHTML}
+      </div>
+
+      <div class="card status-card">
+        <div class="card-label">current activity</div>
+        <div class="status-big">${statusStr}</div>
+        ${toolHTML}
+        ${topicHTML}
+        ${countdownHTML}
+      </div>
+
+      <div class="card personality-card">
+        <div class="card-label">personality</div>
+        ${statsHTML}
+      </div>
+
+      <div class="card memory-card">
+        <div class="card-label">memory</div>
+        <div class="mem-row">
+          <div class="mem-key">sessions total</div>
+          <div class="mem-val">${memory.sessions_total || 0}</div>
+        </div>
+        <div class="mem-row">
+          <div class="mem-key">facts on Ayush</div>
+          <div class="mem-val">${(memory.facts_about_ayush || []).length}</div>
+        </div>
+        <div class="mem-row">
+          <div class="mem-key">last seen</div>
+          <div class="mem-val">${memory.last_seen || 'never'}</div>
+        </div>
+      </div>
+
+      <div class="card github-card">
+        <div class="card-label">github — Ayush442842q</div>
+        ${githubHTML}
+      </div>
+
+      <div class="card learned-card">
+        <div class="card-label">learned today — ${learnedTopics.length} topics</div>
+        ${learnedHTML}
+      </div>
+
+      <div class="card dream-card">
+        <div class="card-label">last dream</div>
+        ${dreamHTML}
+      </div>
+
+    </div>
+  `;
+
+  // keep clock ticking
+  setInterval(() => {
+    const c = document.getElementById('clock');
+    if (c) c.textContent = clockStr();
+  }, 1000);
+}
+
+async function loop() {
+  const feed = await fetchFeed();
+
+  // refresh audit and learned every 30s
+  if (!auditData)     auditData     = await fetchAudit();
+  if (!learnedTopics.length) learnedTopics = await fetchLearned();
+
+  if (feed) {
+    render(feed);
+  } else {
+    document.getElementById('app').innerHTML = `
+      <div class="offline">
+        <div class="name">RAJESH</div>
+        <div class="offline-msg">waiting for boot.py to start...</div>
+      </div>
+    `;
+  }
+}
+
+// refresh audit + learned every 30s
+setInterval(async () => {
+  auditData     = await fetchAudit();
+  learnedTopics = await fetchLearned();
+}, 30000);
+
+loop();
+setInterval(loop, 2000);
+</script>
+</body>
+</html>
