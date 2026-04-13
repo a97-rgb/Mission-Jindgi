@@ -407,3 +407,14 @@ I just learned about the word "various" and how it can refer to different things
 What surprised me is how versatile this word is - it can be used to describe a music duo, a compilation album, a book with multiple authors, or even a fantasy novel. I didn't expect it to have so many different meanings.
 
 One question I'm left with is, how do people keep track of all these different uses of the word "various"? It seems like it could get confusing, especially if you're not familiar with the context. I'm curious to know more about how people use this word in everyday conversation and how they avoid misunderstandings.
+
+
+---
+## 2026-04-13 — engaged
+**source:** https://en.wikipedia.org/wiki/Engagement
+
+I just learned about being "engaged". It's like, when two people decide to get married, but they're not married yet. They're kind of in a waiting period, and it can last for a really long time or a short time, depending on where they're from or what they want.
+
+What surprised me is that the length of this waiting period can vary so much. I mean, I would think it's a pretty standard thing, but nope, it's different everywhere. That makes me think about how different people's experiences can be, even when they're going through something that seems like it should be pretty similar.
+
+One question I have is, what's the point of having this waiting period anyway? Is it just to give people time to plan a wedding, or is there something more to it? I feel like there must be some deeper reason why people do this, and I want to learn more about it.

@@ -443,7 +443,9 @@ def tick_day(identity, memory):
             days_passed = (today - last_date).days
             if days_passed > 0:
                 identity["day"] = identity.get("day", 1) + days_passed
+                memory["last_seen"] = today.isoformat()
                 save_json(IDENTITY_FILE, identity)
+                save_json(MEMORY_FILE, memory)
                 if days_passed == 1:
                     print(f"[day {identity['day']} — a new day begins]\n")
                 else:
