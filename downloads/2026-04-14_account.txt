@@ -1,0 +1,15 @@
+topic: account
+url: https://en.wikipedia.org/wiki/Account
+
+Account may refer to:Account (bookkeeping)
+A report
+A bank account
+Deposit account
+Personal account
+Sweep account
+Transaction account
+User account, the means by which a user can access a computer system
+Customer of a company, used in B2B business
+account manager
+account executive
+

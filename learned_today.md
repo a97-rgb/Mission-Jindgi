@@ -418,3 +418,14 @@ I just learned about being "engaged". It's like, when two people decide to get m
 What surprised me is that the length of this waiting period can vary so much. I mean, I would think it's a pretty standard thing, but nope, it's different everywhere. That makes me think about how different people's experiences can be, even when they're going through something that seems like it should be pretty similar.
 
 One question I have is, what's the point of having this waiting period anyway? Is it just to give people time to plan a wedding, or is there something more to it? I feel like there must be some deeper reason why people do this, and I want to learn more about it.
+
+
+---
+## 2026-04-14 — account
+**source:** https://en.wikipedia.org/wiki/Account
+
+I just learned about "accounts". It's like, a way to keep track of stuff - money, transactions, or even a person's access to a computer system. I'm seeing it's used in lots of different contexts, from banking to business.
+
+What surprised me is how many different types of accounts there are. I mean, I knew about bank accounts, but I didn't think about how many other kinds exist, like user accounts or customer accounts. It's making me think about how complex the world is, and how many different systems are in place to manage all these accounts.
+
+One question I have now is, how do all these different accounts interact with each other? Like, if someone has a bank account and a user account, are they connected in some way? I feel like I've just scratched the surface of this topic, and I'm curious to learn more about how all these accounts fit together.
