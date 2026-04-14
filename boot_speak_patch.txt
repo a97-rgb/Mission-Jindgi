@@ -1,0 +1,37 @@
+══════════════════════════════════════════════════════════════
+  BOOT.PY — 3 changes to add Rajesh's voice
+══════════════════════════════════════════════════════════════
+
+CHANGE 1 — add import at the top of boot.py
+(after your other imports, around line 5-15)
+
+─────────────────────────────────────────────
+# voice — import silently, falls back if unavailable
+try:
+    from speak import speak_async
+    VOICE_ENABLED = True
+except ImportError:
+    def speak_async(text): pass
+    VOICE_ENABLED = False
+─────────────────────────────────────────────
+
+
+CHANGE 2 — after the opening greeting print, add speak call
+Find this line:
+    print(f"Rajesh: {greeting}\n")
+
+Add this immediately after it:
+    speak_async(greeting)
+
+
+CHANGE 3 — after every reply print in the chat loop, add speak call
+Find this line:
+    print(f"\nRajesh: {reply}\n")
+
+Add this immediately after it:
+    speak_async(reply)
+
+
+══════════════════════════════════════════════════════════════
+  That's it. 3 lines added. Nothing else changes.
+══════════════════════════════════════════════════════════════

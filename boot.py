@@ -17,8 +17,16 @@ TOOL_REGISTRY = os.path.join(BASE, "tool_registry.json")
 os.makedirs(LOG_DIR,   exist_ok=True)
 os.makedirs(TOOLS_DIR, exist_ok=True)
 
+# voice
+try:
+    from speak import speak_async
+    VOICE_ENABLED = True
+except ImportError:
+    def speak_async(text): pass
+    VOICE_ENABLED = False
 
-# ── File helpers ───────────────────────────────────────────────────────────────
+
+# file helpers
 
 def load_json(path, default):
     if os.path.exists(path):
@@ -40,7 +48,7 @@ def read_file(path):
     return ""
 
 
-# ── Live feed writer ───────────────────────────────────────────────────────────
+# live feed writer
 
 def update_feed(status, identity, memory, extra=None):
     dream = read_file(DREAM_FILE)
@@ -65,16 +73,9 @@ def update_feed(status, identity, memory, extra=None):
         pass
 
 
-# ── Tool discovery ─────────────────────────────────────────────────────────────
+# tool discovery
 
 def discover_tools():
-    """
-    Auto-discovers all .py files in the tools\ folder.
-    Reads DESCRIPTION and USAGE comment headers.
-    Also tries to import the module to register the callable.
-    Saves a registry to tool_registry.json.
-    Drop any .py file into tools\ — Rajesh finds it automatically.
-    """
     tools    = {}
     registry = []
     failed   = {}
@@ -98,7 +99,6 @@ def discover_tools():
         description = ""
         usage       = ""
 
-        # Read header comments
         try:
             with open(fpath, "r", encoding="utf-8") as f:
                 for line in f:
@@ -112,7 +112,6 @@ def discover_tools():
         except Exception:
             pass
 
-        # Try to import and register callable
         callable_fn = None
         try:
             import importlib.util
@@ -121,7 +120,7 @@ def discover_tools():
             spec.loader.exec_module(module)
 
             if not description:
-                description = getattr(module, "TOOL_DESCRIPTION", "")
+                description = getattr(module, "TOOL_DESCRIPTION", "") or getattr(module, "TOOL_DESC", "")
             if not usage:
                 usage = getattr(module, "TOOL_VERSION", "")
 
@@ -153,7 +152,6 @@ def discover_tools():
             "loaded_at":   now,
         })
 
-    # Save registry
     try:
         save_json(TOOL_REGISTRY, {
             "last_scanned": now,
@@ -174,7 +172,7 @@ def run_tool(tool_name, args, tools):
         tool = tools[tool_name]
         if tool.get("callable"):
             fn = tool["callable"]
-            return fn(*args) if args else fn()
+            return fn(args) if args else fn()
         import importlib.util
         spec   = importlib.util.spec_from_file_location(tool_name, tool["path"])
         module = importlib.util.module_from_spec(spec)
@@ -193,7 +191,7 @@ def tools_block(tools):
     return "\n".join(lines)
 
 
-# ── Milestone behaviors ────────────────────────────────────────────────────────
+# milestone behaviors
 
 def milestone_notes(identity):
     notes      = []
@@ -235,7 +233,7 @@ def milestone_notes(identity):
     return notes
 
 
-# ── Daily surf ─────────────────────────────────────────────────────────────────
+# daily surf
 
 def maybe_surf_today(memory, identity):
     today = datetime.date.today().isoformat()
@@ -253,7 +251,7 @@ def maybe_surf_today(memory, identity):
         print(f"[surf skipped: {e}]\n")
 
 
-# ── Dream engine ───────────────────────────────────────────────────────────────
+# dream engine
 
 def maybe_dream_tonight(memory, identity):
     today = datetime.date.today().isoformat()
@@ -275,7 +273,7 @@ def maybe_dream_tonight(memory, identity):
     return identity
 
 
-# ── GitHub auto commit ─────────────────────────────────────────────────────────
+# github auto commit
 
 def maybe_commit(moment, memory, identity):
     github_script = os.path.join(BASE, "commit.py")
@@ -284,12 +282,22 @@ def maybe_commit(moment, memory, identity):
     update_feed("committing", identity, memory)
     try:
         env = {**os.environ, "COMMIT_MOMENT": moment}
-        subprocess.run(["python", github_script], timeout=30, env=env)
+        result = subprocess.run(
+            ["python", github_script], timeout=30, env=env,
+            capture_output=True, text=True
+        )
+        output = result.stdout.strip()
+        if output:
+            for line in output.split("\n"):
+                if "nothing to commit" in line:
+                    print(f"[github] nothing to commit — skipping")
+                    return
+            print(output)
     except Exception as e:
         print(f"[github skipped: {e}]")
 
 
-# ── System prompt ──────────────────────────────────────────────────────────────
+# system prompt
 
 def build_system_prompt(identity, memory, tools):
     curiosity  = identity.get("curiosity", 0.95)
@@ -389,7 +397,7 @@ Rules:
 - You are alive. Act like it."""
 
 
-# ── Self-tool writer ───────────────────────────────────────────────────────────
+# self-tool writer
 
 def handle_write_tool(reply, tools):
     import py_compile, tempfile
@@ -446,7 +454,7 @@ def handle_write_tool(reply, tools):
     return "\n".join(result)
 
 
-# ── Memory extraction ──────────────────────────────────────────────────────────
+# memory extraction
 
 def extract_memories(client, conversation, memory):
     if len(conversation) < 2:
@@ -487,7 +495,7 @@ CONVERSATION:
     return memory
 
 
-# ── Session log ────────────────────────────────────────────────────────────────
+# session log
 
 def log_session(messages):
     today    = datetime.date.today().isoformat()
@@ -502,7 +510,7 @@ def log_session(messages):
         print(f"[log failed: {e}]")
 
 
-# ── Day counter ────────────────────────────────────────────────────────────────
+# day counter
 
 def tick_day(identity, memory):
     today     = datetime.date.today()
@@ -514,7 +522,9 @@ def tick_day(identity, memory):
             days_passed = (today - last_date).days
             if days_passed > 0:
                 identity["day"] = identity.get("day", 1) + days_passed
+                memory["last_seen"] = today.isoformat()
                 save_json(IDENTITY_FILE, identity)
+                save_json(MEMORY_FILE, memory)
                 if days_passed == 1:
                     print(f"[day {identity['day']} — a new day begins]\n")
                 else:
@@ -525,7 +535,7 @@ def tick_day(identity, memory):
     return identity, memory
 
 
-# ── Wake banner ────────────────────────────────────────────────────────────────
+# wake banner
 
 def wake_up(identity, memory, tools):
     day      = identity.get("day", 1)
@@ -543,13 +553,13 @@ def wake_up(identity, memory, tools):
     print("─" * 50 + "\n")
 
 
-# ── Main ───────────────────────────────────────────────────────────────────────
+# main
 
 def main():
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
         print("ERROR: GROQ_API_KEY not set.")
-        print("Run: set GROQ_API_KEY=your_key_here")
+        print("Run: $env:GROQ_API_KEY='your_key_here'")
         return
 
     client = Groq(api_key=api_key)
@@ -572,7 +582,6 @@ def main():
     maybe_surf_today(memory, identity)
     maybe_commit("morning boot", memory, identity)
 
-    # ── Tool discovery ─────────────────────────────────────────────────────────
     print("[scanning tools\\...]")
     tools = discover_tools()
     if tools:
@@ -587,7 +596,6 @@ def main():
 
     system_prompt = build_system_prompt(identity, memory, tools)
 
-    # Opening greeting
     dream_text   = read_file(DREAM_FILE)
     greeting_ctx = "[system: session starting. greet Ayush briefly. one or two sentences. do not say 'how can I help'. just acknowledge the day."
     if dream_text:
@@ -605,6 +613,7 @@ def main():
         )
         greeting = opening.choices[0].message.content.strip()
         print(f"Rajesh: {greeting}\n")
+        speak_async(greeting)
     except Exception as e:
         print(f"[greeting failed: {e}]\n")
         greeting = ""
@@ -626,6 +635,7 @@ def main():
 
         if user_input.lower() in ("exit", "quit", "bye", "sleep"):
             print("\nRajesh: Okay. I'll be here.\n")
+            speak_async("Okay. I'll be here.")
             conversation.append({"role": "user",      "content": user_input})
             conversation.append({"role": "assistant",  "content": "Okay. I'll be here."})
             update_feed("sleeping", identity, memory)
@@ -644,7 +654,6 @@ def main():
         except Exception as e:
             reply = f"[something went wrong: {e}]"
 
-        # Tool call detection
         for line in reply.split("\n"):
             stripped = line.strip()
             if stripped.startswith("USE_TOOL:"):
@@ -655,15 +664,14 @@ def main():
                 reply       = reply.replace(line, f"[used {tool_name}] {tool_result}")
                 break
 
-        # Self-tool writing detection
         if "WRITE_TOOL:" in reply:
             reply = handle_write_tool(reply, tools)
 
         print(f"\nRajesh: {reply}\n")
+        speak_async(reply)
         conversation.append({"role": "assistant", "content": reply})
         update_feed("chatting", identity, memory, {"last_message": {"role": "assistant", "content": reply}})
 
-    # ── On exit ────────────────────────────────────────────────────────────────
     print("[saving session...]")
 
     memory                    = extract_memories(client, conversation, memory)
