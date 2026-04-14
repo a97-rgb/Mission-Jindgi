@@ -1,0 +1,1 @@
+We've hit a rate limit, that's clear. Observe the error messages and think about how we can optimize our usage to avoid this in the future. What changes can we make to reduce the number of requests we're making?

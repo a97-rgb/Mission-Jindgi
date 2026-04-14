@@ -1,0 +1,173 @@
+[
+  {
+    "name": "pdf-processing-engine",
+    "stars": 0,
+    "score": 25,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo",
+      "README is very short — needs proper content"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "IRCTC-LOCALv1",
+    "stars": 0,
+    "score": 25,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo",
+      "README is very short — needs proper content"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "IRCTC-LOCALv2",
+    "stars": 0,
+    "score": 25,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo",
+      "README is very short — needs proper content"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "Batchfile"
+  },
+  {
+    "name": "Vision-Guard",
+    "stars": 0,
+    "score": 35,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo",
+      "README exists but is thin — expand it"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Cortex",
+    "stars": 0,
+    "score": 45,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Dataminer",
+    "stars": 0,
+    "score": 45,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Memory-AI",
+    "stars": 0,
+    "score": 45,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "HTML"
+  },
+  {
+    "name": "Code-Generator",
+    "stars": 0,
+    "score": 45,
+    "issues": [
+      "no topics — GitHub search cannot find this repo",
+      "README is very short — needs proper content"
+    ],
+    "desc": "Your Junior dev to write programs in single file",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Dev-Vault",
+    "stars": 0,
+    "score": 45,
+    "issues": [
+      "no description — add one immediately",
+      "no topics — GitHub search cannot find this repo"
+    ],
+    "desc": "",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Universal-Shorts-Bot",
+    "stars": 0,
+    "score": 45,
+    "issues": [
+      "no topics — GitHub search cannot find this repo",
+      "README is very short — needs proper content"
+    ],
+    "desc": "Updated version of Shorts creator and uploader  ",
+    "topics": [],
+    "lang": "unknown"
+  },
+  {
+    "name": "PyToolkit",
+    "stars": 0,
+    "score": 55,
+    "issues": [
+      "no topics — GitHub search cannot find this repo",
+      "README exists but is thin — expand it"
+    ],
+    "desc": "A collection of useful Python utility scripts",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Environment-setting-up-tool-",
+    "stars": 0,
+    "score": 55,
+    "issues": [
+      "no topics — GitHub search cannot find this repo",
+      "README exists but is thin — expand it"
+    ],
+    "desc": "A tool which is able to setup environment for all the programming language",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Handwritten-Digit-Recognition",
+    "stars": 0,
+    "score": 55,
+    "issues": [
+      "description is too short — expand it",
+      "no topics — GitHub search cannot find this repo"
+    ],
+    "desc": "Recognises digits ",
+    "topics": [],
+    "lang": "Python"
+  },
+  {
+    "name": "Debugger",
+    "stars": 0,
+    "score": 65,
+    "issues": [
+      "no topics — GitHub search cannot find this repo"
+    ],
+    "desc": "Your Partner to teach you about errors",
+    "topics": [],
+    "lang": "Python"
+  }
+]
