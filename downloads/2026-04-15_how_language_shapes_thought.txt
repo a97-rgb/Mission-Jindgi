@@ -1,0 +1,4 @@
+topic: how language shapes thought
+url: https://en.wikipedia.org/api/rest_v1/page/summary/Frank%20Herbert
+
+Franklin Patrick Herbert Jr. was an American science-fiction author, best known for his 1965 novel Dune and five sequels to it. He also wrote short stories and worked as a newspaper journalist, photographer, book reviewer, ecological consultant, and lecturer.

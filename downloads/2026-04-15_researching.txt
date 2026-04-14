@@ -1,0 +1,10 @@
+topic: researching
+url: https://en.wikipedia.org/wiki/Research
+
+Research is creative and systematic work undertaken to increase the stock of knowledge. It involves the collection, organization, and analysis of evidence to increase understanding of a topic, characterized by a particular attentiveness to controlling sources of bias and error. These activities are characterized by accounting and controlling for biases. A research project may be an expansion of past work in the field. To test the validity of instruments, procedures, or experiments, research may replicate elements of prior projects or the project as a whole. The primary purposes of basic research are documentation, discovery, interpretation, and the research and development of methods and systems for the advancement of human knowledge. Approaches to research depend on epistemologies, which vary considerably both within and between humanities and sciences.
+
+Research Category
+Advertising research - Advertising research is a systematic process of marketing research conducted to improve the efficiency of advertising. Advertising research is a detailed study conducted to know how customers respond to a particular ad or advertising campaign.
+European Charter for Researchers - The European Charter for Researchers is a recommendation of good practice for researchers and employers and/or funders of researchers issued by the European Commission Directorate-General for Research. It sketches rights and duties of researchers and their funding institutions.
+Internet research - In its widest sense, Internet research comprises any kind of research done on the Internet or the World Wide Web. Unlike simple fact-checking or web scraping, it often involves synthesizing from diverse sources and verifying the credibility of each.
+Laboratory - A laboratory is a facility that provides controlled conditions in which scientific or technological research, experiments, and measurement may be performed.

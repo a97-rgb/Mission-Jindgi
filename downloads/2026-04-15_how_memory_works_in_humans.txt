@@ -1,0 +1,4 @@
+topic: how memory works in humans
+url: https://en.wikipedia.org/api/rest_v1/page/summary/Kl%C3%BCver%E2%80%93Bucy%20syndrome
+
+Klüver–Bucy syndrome is a syndrome resulting from lesions of the medial temporal lobe, particularly Brodmann area 38, causing compulsive eating, hypersexuality, a compulsive need to insert inappropriate objects in the mouth (hyperorality), visual agnosia, and docility. Klüver–Bucy syndrome is more commonly found in rhesus monkeys, where the condition was first documented, than in humans. The underlying pathology of the syndrome is still controversial, with the Muller theory and a theory by Norman Geschwind offering different explanations for the condition. Treatment for Klüver–Bucy syndrome is usually with mood stabilizers, anti-psychotics, and anti-depressants.

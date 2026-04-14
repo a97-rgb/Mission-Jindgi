@@ -1,0 +1,39 @@
+topic: repositories
+url: [internal knowledge — repositories]
+
+Repository
+================
+
+A repository is a central location where data, files, or objects are stored and managed. It can be a physical or digital space, and its purpose is to provide a single source of truth for accessing and retrieving information. Repositories can be used in various contexts, including software development, data management, and cultural preservation.
+
+Types of Repositories
+--------------------
+
+There are several types of repositories, including:
+
+* **Version control repositories**: These store different versions of software code, allowing developers to track changes and collaborate on projects. Examples include Git and Subversion.
+* **Data repositories**: These store and manage large datasets, often for research or analytical purposes. Examples include data warehouses and data lakes.
+* **Digital repositories**: These store digital objects, such as images, videos, and documents, often for preservation and access purposes. Examples include digital libraries and archives.
+* **Software repositories**: These store software packages and applications, making it easy to install and manage software on computers. Examples include package managers like apt and yum.
+
+Characteristics
+----------------
+
+Repositories often have the following characteristics:
+
+* **Centralized storage**: All data or objects are stored in a single location.
+* **Access control**: Users must authenticate and authorize to access the repository.
+* **Versioning**: Changes to data or objects are tracked and stored.
+* **Search and retrieval**: Users can search and retrieve data or objects from the repository.
+
+Examples
+---------
+
+Examples of repositories include:
+
+* GitHub, a version control repository for software development
+* The Internet Archive, a digital repository for preserving cultural heritage
+* The National Archives, a physical repository for storing historical documents and records
+* The Python Package Index, a software repository for Python packages and libraries.
+
+In summary, a repository is a centralized location for storing and managing data, files, or objects, providing a single source of truth for accessing and retrieving information.

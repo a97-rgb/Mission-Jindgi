@@ -1,0 +1,10 @@
+topic: linux operating system
+url: https://en.wikipedia.org/wiki/Linux
+
+Linux is a family of open source Unix-like operating systems based on the Linux kernel, a kernel first released on 17 September 1991, by Linus Torvalds. Linux is typically packaged as a Linux distribution, which includes the kernel and supporting system software and libraries – most of which are provided by third parties – to create a complete operating system. Linux was originally designed as a clone of Unix and is released under the copyleft GPL license. There are many thousands of Linux distributions, many based directly or indirectly on other distributions; popular Linux distros include Debian, Fedora Linux, Linux Mint, Arch Linux, and Ubuntu, while commercial distributions include Red Hat Enterprise Linux, SUSE Linux Enterprise, and ChromeOS. Linux distributions are frequently used in server platforms.
+
+Linux Category
+Backward compatibility - In telecommunications and computing, backward compatibility is a property of an operating system, software, real-world product, or technology that allows for interoperability with an older legacy system, or with input designed for such a system.
+Criticism of Linux - The criticism of Linux focuses on issues concerning use of operating systems which use the Linux kernel.
+Linux kernel version history - This article documents the version history of the Linux kernel, a free, open-source, and Unix-like kernel that is used in many computer systems worldwide. Since the Linux kernel's creation by Linus Torvalds in 1991, it grew rapidly as many developers contributed to the project.
+Linux Documentation Project - The Linux Documentation Project is a dormant all-volunteer project that maintains a large collection of GNU and Linux-related documentation and publishes the collection online.

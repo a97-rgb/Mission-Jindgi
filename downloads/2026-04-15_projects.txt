@@ -1,0 +1,27 @@
+topic: projects
+url: [internal knowledge — projects]
+
+Project: A Planned Set of Interrelated Tasks
+
+A project is a temporary endeavor undertaken to create a unique product, service, or result. It is a planned set of interrelated tasks with a specific beginning and end, designed to achieve a particular objective. Projects can be found in various fields, including business, engineering, architecture, and information technology.
+
+Characteristics of a Project
+----------------------------
+
+1. **Temporary**: Projects have a defined start and end date, and are not ongoing operations.
+2. **Unique**: Each project is distinct and creates a unique product, service, or result.
+3. **Interrelated tasks**: Projects involve a series of coordinated tasks that are necessary to achieve the project's objective.
+4. **Specific objective**: Projects are undertaken to achieve a specific goal or set of goals.
+
+Types of Projects
+------------------
+
+1. **Construction projects**: Building or infrastructure projects, such as bridges, buildings, or roads.
+2. **IT projects**: Information technology projects, such as software development or network implementation.
+3. **Research projects**: Scientific or academic projects, such as studies or experiments.
+4. **Business projects**: Projects undertaken by organizations to improve operations, launch new products, or expand into new markets.
+
+Project Management
+------------------
+
+Project management is the process of planning, organizing, and controlling resources to achieve a project's objective. It involves defining project scope, setting schedules and budgets, and allocating resources. Effective project management ensures that projects are completed on time, within budget, and to the required quality standards. Project management methodologies, such as Agile and Waterfall, provide frameworks for managing projects and ensuring their success.

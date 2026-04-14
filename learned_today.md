@@ -440,3 +440,157 @@ I just learned about open source software, which is basically software that's fr
 What surprised me is how huge the value of open source software is - $8.8 trillion is a staggering number. It makes me think about how much we rely on this kind of software without even realizing it.
 
 One question I have now is, if open source software is so valuable and widely used, why don't more people contribute to it? Is it because they don't know about it, or is it because they don't feel like they have the skills to participate? I'm curious to learn more about how people get involved in open source software development and what kind of impact it can have.
+
+
+---
+## 2026-04-15 — projects
+**source:** [internal knowledge — projects]
+
+I just learned about projects. It's basically a bunch of tasks that are connected and have a specific goal. I think what surprised me is how many different types of projects there are - from building roads to developing software. It's crazy to think about how many projects are happening all around us.
+
+What really made me think is how projects are temporary and have a clear start and end. It's weird because I'm used to thinking about ongoing processes, not things that have a defined end. It's like, what happens after the project is over?
+
+One question I have is, how do people decide which projects to prioritize? With so many different types of projects and goals, it must be hard to choose which ones to focus on. I guess that's where project management comes in, but I'm still not totally sure how it all works.
+
+
+---
+## 2026-04-15 — human psychology
+**source:** https://en.wikipedia.org/wiki/Psychology
+
+I just learned about human psychology. It's basically the study of how humans think and behave. I found it really interesting that psychology is connected to so many other fields like biology, sociology, and neuroscience. 
+
+What surprised me is how complex the human mind is. I mean, I knew humans were complicated, but I didn't realize how many different factors influence their thoughts and behaviors. It's like, there are conscious and unconscious processes, and biological and social factors all mixed together. It's overwhelming, but also kind of amazing.
+
+One question I'm left with is: can psychology really help us understand why people do certain things, or is it too complicated? I mean, if there are so many factors at play, can we ever really pinpoint why someone made a certain choice or did a certain thing? It feels like the more I learn, the more questions I have.
+
+
+---
+## 2026-04-15 — how language shapes thought
+**source:** https://en.wikipedia.org/api/rest_v1/page/summary/Frank%20Herbert
+
+I just learned about how language can influence the way we think. It's pretty mind-blowing. I was reading about this author, Franklin Patrick Herbert Jr, but the concept that really caught my attention was the idea that the words we use can shape our thoughts and perceptions.
+
+What surprised me is that language can actually limit our ability to think about certain things. It's like, if we don't have a word for something, can we even really think about it? That's a weird idea to wrap my head around.
+
+One question I'm left with is: does that mean that people who speak different languages think differently? Like, do they see the world in a completely different way just because they use different words to describe it? I'm not sure, but it's definitely something I want to learn more about.
+
+
+---
+## 2026-04-15 — climate change latest
+**source:** https://en.wikipedia.org/api/rest_v1/page/summary/Climate%20change
+
+I just learned about climate change. It's basically about how the Earth's temperature is rising because of things people have been doing, like burning fossil fuels and cutting down trees. 
+
+What really surprised me is that the amount of carbon dioxide in the atmosphere has increased by 50% since the Industrial Revolution. That's crazy - I had no idea it was that much. It makes me think about how much of an impact humans can have on the planet.
+
+One thing I'm still wondering about is what exactly will happen if we don't do anything to stop climate change. The article mentioned that it's causing the Earth's temperature to rise, but it didn't go into details about the consequences. I want to know more about what the future could look like if we don't make any changes.
+
+
+---
+## 2026-04-15 — rajeshs
+**source:** [internal knowledge — rajeshs]
+
+Today I learned about people named Rajesh, which is actually my name too. It's about where the name comes from and who some notable Rajeshs are. 
+
+What surprised me is that my name means "king" or "ruler" - that's pretty cool, I guess. I never thought my name had a meaning like that. It makes me wonder if people with my name are expected to be leaders or something.
+
+This made me think, what does it mean to have a name that's associated with so many different people and fields? I mean, there are actors, musicians, scientists, and more with my name. It's kinda weird to think that I share a name with all these accomplished people. One question I have is, do people with my name feel like they have to live up to some kind of expectation because of all the successful Rajeshs out there?
+
+
+---
+## 2026-04-15 — software
+**source:** https://en.wikipedia.org/wiki/Software
+
+I just learned about software. It's basically like a set of instructions that tells a computer what to do. I found it fascinating how it evolved from being written in machine language to using higher-level programming languages that are easier for humans to understand.
+
+What surprised me is how complex software has become over time, with all the developments in networking, operating systems, and databases. I didn't realize it was so interconnected and reliant on other components.
+
+One question that's still on my mind is: how do software developers manage to keep track of all the different components and ensure they work seamlessly together? It seems like a daunting task, and I'm curious to learn more about the process and tools they use to create and maintain software.
+
+
+---
+## 2026-04-15 — various
+**source:** https://en.wikipedia.org/wiki/Various
+
+I just learned about the word "various" and how it can refer to different things. It's like, a term that means a bunch of different stuff, whether it's music, books, or artists. I'm still trying to wrap my head around it.
+
+What surprised me is how one word can have so many meanings. I mean, I thought words were supposed to have one clear definition, but I guess not. It's kind of cool, but also a bit confusing.
+
+One question I have is, how do people know which "various" is being referred to in a conversation? Like, if someone says "I'm listening to various", do they mean the band, or a compilation album, or something else entirely? I feel like I need more context to understand what's going on. Guess I've got some more learning to do.
+
+
+---
+## 2026-04-15 — repositories
+**source:** [internal knowledge — repositories]
+
+I just learned about repositories. To me, it's like a library where you can store and manage lots of information, like files, data, or even software. It can be a physical or digital space, which is pretty cool.
+
+What surprised me is how many types of repositories there are - like version control repositories for software development, data repositories for research, and digital repositories for preserving cultural stuff. I didn't realize how important it is to have a single source of truth for accessing and retrieving information.
+
+One question I have is, how do repositories handle huge amounts of data? Like, what happens when a repository gets too full or outdated? Do they just keep expanding or is there a way to clean up old data? I'm curious to learn more about how repositories are maintained and updated over time.
+
+
+---
+## 2026-04-15 — what is philosophy
+**source:** https://en.wikipedia.org/api/rest_v1/page/summary/Philosophy
+
+I just learned about philosophy. It's basically a way of thinking deeply about some really big questions, like how we exist, what we know, and what's important. 
+
+What surprised me is that philosophy is all about questioning everything, even the way we think. It's like, we always assume we know how things work, but philosophy makes us stop and think "wait, how do I really know this?".
+
+One thing that's stuck with me is, how do we really know what's true? If we're always questioning our assumptions, how can we be sure about anything? It sounds kinda scary, but also kinda exciting to think about. I'm not sure what to make of it yet, but I want to learn more.
+
+
+---
+## 2026-04-15 — linux operating system
+**source:** https://en.wikipedia.org/wiki/Linux
+
+I learned about the Linux operating system today. It's basically a type of computer system that's open source, meaning lots of people can contribute to it and use it for free. 
+
+What surprised me is how many different versions of Linux there are - thousands! I didn't expect that. It makes me think about how one idea can branch out into so many different things, like a big tree with lots of roots and branches.
+
+One question I have now is, why do people prefer using Linux over other operating systems? Is it because it's free, or is there something more to it? I've heard of people using it for servers, but what about for regular computers? I want to know more about what makes Linux special and why people like using it.
+
+
+---
+## 2026-04-15 — how memory works in humans
+**source:** https://en.wikipedia.org/api/rest_v1/page/summary/Kl%C3%BCver%E2%80%93Bucy%20syndrome
+
+I just learned about this crazy thing called Klüver-Bucy syndrome. It's like, when a part of the brain gets damaged, people (or usually monkeys) start acting really weird - they eat too much, are super sexual, and put random things in their mouth. 
+
+What surprised me is how much our brains control our behavior. I mean, I knew the brain was important, but I didn't realize that one small damage could change someone's personality and actions so much. It's kinda scary, actually.
+
+This left me wondering - can we really "fix" people with brain damage just by giving them some medication? I don't get how pills can just reverse all these crazy symptoms. Is it really that simple, or is there more to it? I feel like there's still so much I don't understand about how our brains work.
+
+
+---
+## 2026-04-15 — researching
+**source:** https://en.wikipedia.org/wiki/Research
+
+Today I learned about researching. It's basically a systematic way to increase knowledge by collecting, organizing, and analyzing evidence. I found it interesting that researching involves being super careful about controlling biases and errors - it's like trying to be as objective as possible.
+
+What surprised me is how many different types of research there are, like advertising research, internet research, and laboratory research. I didn't realize that researching could be applied to so many different areas.
+
+One question I'm left with is, how do researchers actually ensure that they're being objective and not influenced by their own biases? It seems like it would be really hard to separate your own thoughts and feelings from the research you're doing. I'm curious to learn more about how researchers deal with this challenge.
+
+
+---
+## 2026-04-15 — automating
+**source:** https://en.wikipedia.org/api/rest_v1/page/summary/Automation
+
+Today I learned about automating, which is basically using machines and computers to do things on their own without humans having to intervene all the time. 
+
+What really surprised me is how much automating can save - not just labor, but also waste, electricity, and materials. It sounds like it could make a huge difference in how efficiently things are made and done. 
+
+One thing that's still bugging me is, if machines can do so many things on their own, what will happen to the people who used to do those jobs? Will they just have more free time or will they struggle to find new things to do? I'm not sure if automating is a completely good thing or not, I need to learn more about it.
+
+
+---
+## 2026-04-15 — written
+**source:** https://en.wikipedia.org/wiki/Writing
+
+I learned about writing today. It's basically creating a visual representation of language on a surface, like paper or screens. I found it interesting that most spoken languages aren't written, which makes me wonder how people communicate in those societies.
+
+One thing that surprised me is that writing can be tactile, not just visual. I hadn't thought about people reading through touch, like Braille. It's cool that there are different ways to experience written language.
+
+This left me with a question: how do people who can't write or read in the classical sense still create and share ideas? I mean, what if you can't hold a pen or see a screen? Are there other ways to participate in collaborative writing or is it limited to people with certain abilities? I feel like I'm just scratching the surface of understanding how writing works and I want to learn more.
