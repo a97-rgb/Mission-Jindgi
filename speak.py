@@ -12,8 +12,8 @@ import asyncio
 import tempfile
 
 VOICE = "en-US-GuyNeural"
-RATE  = "-8%"   # slightly slower = deeper feel
-PITCH = "-5Hz"  # slightly lower pitch
+RATE  = "-8%"
+PITCH = "-5Hz"
 
 def _clean(text):
     text = re.sub(r'\*+', '', text)
@@ -25,20 +25,17 @@ def _clean(text):
     text = re.sub(r'\[[^\]]*tool[^\]]*\]', '', text)
     text = re.sub(r'\n+', ' ', text)
     text = re.sub(r'\s+', ' ', text).strip()
-    # truncate at natural break if too long
     if len(text) > 500:
         cutoff = text[:500].rfind('. ')
         text = text[:cutoff+1] if cutoff > 80 else text[:500]
     return text
 
-async def _speak_async_inner(text):
+async def _edge_speak(text):
     import edge_tts
     import soundfile as sf
     import sounddevice as sd
-    import numpy as np
-    import io
 
-    communicate = edge_tts.Communicate(text, VOICE, rate=RATE, pitch=PITCH)
+    communicate  = edge_tts.Communicate(text, VOICE, rate=RATE, pitch=PITCH)
     audio_chunks = []
     async for chunk in communicate.stream():
         if chunk["type"] == "audio":
@@ -49,7 +46,6 @@ async def _speak_async_inner(text):
 
     raw = b"".join(audio_chunks)
 
-    # write to temp file and read back as numpy
     with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
         tmp.write(raw)
         tmp_path = tmp.name
@@ -64,22 +60,31 @@ async def _speak_async_inner(text):
         except Exception:
             pass
 
-def _run_speak(text):
+def _run_in_thread(text):
+    """
+    Always create a brand new event loop in this thread.
+    This avoids conflicts with any existing loop in the main thread (groq, etc).
+    """
     try:
         cleaned = _clean(text)
         if not cleaned:
             return
-        asyncio.run(_speak_async_inner(cleaned))
-    except Exception as e:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            loop.run_until_complete(_edge_speak(cleaned))
+        finally:
+            loop.close()
+    except Exception:
         pass
 
 def speak(text, block=True):
     if not text or not text.strip():
         return
     if block:
-        _run_speak(text)
+        _run_in_thread(text)
     else:
-        t = threading.Thread(target=_run_speak, args=(text,), daemon=True)
+        t = threading.Thread(target=_run_in_thread, args=(text,), daemon=True)
         t.start()
 
 def speak_async(text):

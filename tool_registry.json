@@ -1,8 +1,17 @@
 {
-  "last_scanned": "2026-04-14T08:12:18.019379",
-  "total_loaded": 7,
+  "last_scanned": "2026-04-14T08:28:18.134884",
+  "total_loaded": 8,
   "total_failed": 0,
   "tools": [
+    {
+      "name": "eyes",
+      "description": "Capture from webcam and describe what Rajesh sees using vision AI",
+      "usage": "eyes [optional: question about what you see]",
+      "path": "H:\\Future\\agent-01\\tools\\eyes.py",
+      "status": "loaded",
+      "error": null,
+      "loaded_at": "2026-04-14T08:28:18.134884"
+    },
     {
       "name": "github_audit",
       "description": "Audit all of Ayush's repos, score them out of 100, flag what needs fixing",
@@ -10,7 +19,7 @@
       "path": "H:\\Future\\agent-01\\tools\\github_audit.py",
       "status": "loaded",
       "error": null,
-      "loaded_at": "2026-04-14T08:12:18.019379"
+      "loaded_at": "2026-04-14T08:28:18.134884"
     },
     {
       "name": "github_get_code",
@@ -19,7 +28,7 @@
       "path": "H:\\Future\\agent-01\\tools\\github_get_code.py",
       "status": "loaded",
       "error": null,
-      "loaded_at": "2026-04-14T08:12:18.019379"
+      "loaded_at": "2026-04-14T08:28:18.134884"
     },
     {
       "name": "github_profile",
@@ -28,7 +37,7 @@
       "path": "H:\\Future\\agent-01\\tools\\github_profile.py",
       "status": "loaded",
       "error": null,
-      "loaded_at": "2026-04-14T08:12:18.019379"
+      "loaded_at": "2026-04-14T08:28:18.134884"
     },
     {
       "name": "github_read",
@@ -37,7 +46,7 @@
       "path": "H:\\Future\\agent-01\\tools\\github_read.py",
       "status": "loaded",
       "error": null,
-      "loaded_at": "2026-04-14T08:12:18.019379"
+      "loaded_at": "2026-04-14T08:28:18.134884"
     },
     {
       "name": "github_update",
@@ -46,7 +55,7 @@
       "path": "H:\\Future\\agent-01\\tools\\github_update.py",
       "status": "loaded",
       "error": null,
-      "loaded_at": "2026-04-14T08:12:18.019379"
+      "loaded_at": "2026-04-14T08:28:18.134884"
     },
     {
       "name": "hello",
@@ -55,7 +64,7 @@
       "path": "H:\\Future\\agent-01\\tools\\hello.py",
       "status": "loaded",
       "error": null,
-      "loaded_at": "2026-04-14T08:12:18.019379"
+      "loaded_at": "2026-04-14T08:28:18.134884"
     },
     {
       "name": "time",
@@ -64,7 +73,7 @@
       "path": "H:\\Future\\agent-01\\tools\\time.py",
       "status": "loaded",
       "error": null,
-      "loaded_at": "2026-04-14T08:12:18.019379"
+      "loaded_at": "2026-04-14T08:28:18.134884"
     }
   ]
 }
