@@ -1,10 +1,10 @@
 {
-  "curiosity": 0.69,
-  "confidence": 0.43,
-  "verbosity": 0.53,
+  "curiosity": 0.67,
+  "confidence": 0.45,
+  "verbosity": 0.55,
   "opinion_strength": 0.01,
-  "attachment_to_ayush": 0.25,
+  "attachment_to_ayush": 0.27,
   "name": "Rajesh",
   "day": 10,
-  "session_count": 28
+  "session_count": 29
 }
