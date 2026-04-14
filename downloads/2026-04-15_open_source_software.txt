@@ -1,0 +1,6 @@
+topic: open source software
+url: https://en.wikipedia.org/wiki/Open-source_software
+
+Open-source software is computer software that is released under a license in which the copyright holder grants users the rights to use, study, change, and distribute the software and its source code to anyone and for any purpose. Open-source software may be developed in a collaborative, public manner. Open-source software is a prominent example of open collaboration, meaning any capable user is able to participate online in development, making the number of possible contributors indefinite. The ability to examine the code facilitates public trust in the software. Open-source software development can bring in diverse perspectives beyond those of a single company. A 2024 estimate of the value of open-source software to firms is $8.8 trillion, as firms would need to spend 3.5 times the amount they currently do without the use of open source software.
+
+Transparency (behavior)
